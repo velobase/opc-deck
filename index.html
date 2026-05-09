@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OPC × Velobase — 42章经</title>
-<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600&family=Source+Code+Pro:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Source+Code+Pro:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -18,7 +18,7 @@
   --border: rgba(255,255,255,0.08);
   --green: #15be53;
   --ruby: #ea2261;
-  --font: 'Source Sans 3', system-ui, -apple-system, sans-serif;
+  --font: 'Inter', -apple-system, 'PingFang SC', 'Noto Sans SC', system-ui, sans-serif;
   --mono: 'Source Code Pro', ui-monospace, monospace;
 }
 
@@ -36,25 +36,25 @@ html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(-
 .slide.active { opacity: 1; pointer-events: auto; }
 
 h1 {
-  font-size: 56px; font-weight: 300; letter-spacing: -1.4px;
-  line-height: 1.1; text-align: center; margin-bottom: 24px;
+  font-size: 48px; font-weight: 500; letter-spacing: -1px;
+  line-height: 1.15; text-align: center; margin-bottom: 24px;
 }
 h2 {
-  font-size: 40px; font-weight: 300; letter-spacing: -0.8px;
-  line-height: 1.15; margin-bottom: 20px;
+  font-size: 36px; font-weight: 500; letter-spacing: -0.5px;
+  line-height: 1.2; margin-bottom: 20px;
 }
 h3 {
-  font-size: 28px; font-weight: 300; letter-spacing: -0.4px;
-  line-height: 1.2; margin-bottom: 16px;
+  font-size: 24px; font-weight: 500; letter-spacing: -0.3px;
+  line-height: 1.25; margin-bottom: 16px;
 }
 p, li {
-  font-size: 22px; font-weight: 300; line-height: 1.5;
+  font-size: 20px; font-weight: 400; line-height: 1.6;
   color: var(--text-muted);
 }
 p { margin-bottom: 12px; }
 
 .subtitle {
-  font-size: 24px; color: var(--text-muted); font-weight: 300;
+  font-size: 22px; color: var(--text-muted); font-weight: 400;
   text-align: center;
 }
 
@@ -174,20 +174,16 @@ ul li::before {
 
 <!-- Slide 2: Facts -->
 <div class="slide" data-slide="2">
-  <h2>事实</h2>
-  <div style="display: flex; gap: 80px; margin-top: 40px;">
-    <div style="text-align: center;">
-      <div class="big-number">1</div>
-      <p style="margin-top: 8px;">人</p>
-    </div>
-    <div style="text-align: center;">
-      <div class="big-number" style="color: var(--green);">盈利</div>
-      <p style="margin-top: 8px;">且在增长</p>
-    </div>
-    <div style="text-align: center;">
-      <div class="big-number">0</div>
-      <p style="margin-top: 8px;">融资</p>
-    </div>
+  <div style="max-width: 600px; text-align: left;">
+    <p style="font-size: 26px; color: var(--text); line-height: 1.8;">
+      一个人做的。<br>
+      没拿融资。<br>
+      已经盈利，还在增长。
+    </p>
+    <p style="margin-top: 32px; font-size: 20px; color: var(--text-muted);">
+      不是天才，也不是卷王。<br>
+      只是把时间花对了地方。
+    </p>
   </div>
 </div>
 
