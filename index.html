@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Velobase Harness — OPC Talk</title>
+<title>不要让人类限制了 AI — Velobase</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
 <script>
@@ -62,125 +62,228 @@ html, body { height: 100%; overflow: hidden; background: #0a0a1a; }
 
 <div class="relative w-screen h-screen z-10">
 
-<!-- Slide 1: S — Situation -->
+<!-- Slide 1: 封面 -->
 <div class="slide active" data-slide="1">
-  <p class="text-sm font-mono text-accent uppercase tracking-wider">Situation</p>
-  <h1 class="text-4xl font-medium tracking-tight leading-tight mt-4">AI SaaS 光有 AI 功能，卖不了钱。</h1>
-  <p class="mt-6 text-xl text-muted max-w-2xl leading-relaxed">能卖钱的产品需要一组具体的商业模块：<br>支付对账、反滥用、广告归因、用户生命周期管理……</p>
-  <p class="mt-6 text-lg text-white/70">这些模块的难点不是「怎么写」，而是「不知道要写」。</p>
-  <div class="notes">大家好，我是 Jerry，Velobase 创始人。今天跟大家分享一些具体的东西。做 AI SaaS 的人很多，但大部分产品不赚钱。原因不是 AI 功能做得不好，而是产品缺少一系列商业化模块。这些模块的问题不在于技术难度——有 AI 帮忙都能写——而在于开发者根本不知道需要做这些东西。接下来我会讲 5 个具体的知识点，都是我们踩坑学到的。</div>
+  <h1 class="text-5xl font-medium tracking-tight leading-tight">不要让人类限制了 AI</h1>
+  <p class="mt-6 text-xl text-muted">一人公司的商业化底座实践</p>
+  <p class="mt-12 text-base text-muted/50">Jerry · Velobase</p>
+  <div class="notes">大家好，我是 Jerry，Velobase 创始人。今天15分钟，跟大家聊一个很具体的事情：做一个能赚钱的 AI SaaS，除了核心功能之外，到底还需要做哪些事。不讲大词，全是实操。</div>
 </div>
 
-<!-- Slide 2: T — Task -->
+<!-- Slide 2: 行业观察 -->
 <div class="slide" data-slide="2">
-  <p class="text-sm font-mono text-accent uppercase tracking-wider">Task</p>
-  <h2 class="text-4xl font-medium tracking-tight mt-4">Velobase Harness</h2>
-  <p class="mt-6 text-xl text-muted max-w-2xl leading-relaxed">
-    一个开源框架，把这些「你不知道要做」的模块预置好。<br>
-    填环境变量启用，不改代码。
-  </p>
-  <div class="mt-8 font-mono text-sm text-accent/70">github.com/velobase/velobase-harness</div>
-  <div class="notes">为了解决这个问题，我们做了 Velobase Harness，一个开源的全栈 AI SaaS 框架。它的核心设计很简单：把我们踩过的坑全部内置为可插拔模块，你填一个环境变量就自动启用，不需要改代码。接下来我不讲框架架构，直接讲 5 个具体问题，讲清楚它们是什么、为什么你可能不知道、我们怎么处理的。</div>
+  <h2 class="text-4xl font-medium tracking-tight leading-snug">AI 写代码越来越强了，<br><span class="text-muted">但大部分一人公司，还是不赚钱。</span></h2>
+  <p class="mt-8 text-xl text-muted max-w-2xl">常见误诊：「是不是 AI 写的业务还不够复杂？」</p>
+  <div class="notes">过去一年，大家感受很深：Cursor、Claude 越来越强，一个周末就能写出一个 MVP。但真正赚到钱的独立开发者并没有变多。大部分人的第一反应是——是不是核心功能还不够好？但我看了很多死掉的项目，发现不是这么回事。</div>
 </div>
 
-<!-- Slide 3: A1 — 支付掉单 -->
+<!-- Slide 3: 真正的瓶颈 -->
 <div class="slide" data-slide="3">
-  <p class="text-sm font-mono text-accent uppercase tracking-wider">Action 1 · 支付掉单</p>
-  <h2 class="text-3xl font-medium tracking-tight mt-4">Stripe Webhook 会丢。<br><span class="text-muted">用户付了钱，你不知道。</span></h2>
-  <div class="mt-8 max-w-2xl space-y-4">
-    <div class="flex items-start gap-3">
-      <span class="text-red font-mono text-sm mt-1">问题</span>
-      <p class="text-lg text-muted">网络抖动、服务重启、部署间隙——Webhook 没收到。<br>订单卡在 PENDING，用户付了钱没权益。</p>
-    </div>
-    <div class="flex items-start gap-3">
-      <span class="text-green font-mono text-sm mt-1">处理</span>
-      <p class="text-lg text-white/80">每分钟扫描 PENDING 订单，主动向 Stripe 查询真实状态。<br>每小时全量对账，确保没有一笔遗漏。</p>
-    </div>
-  </div>
-  <div class="notes">第一个知识点：支付掉单。你接了 Stripe，用户付款成功后，Stripe 会通过 Webhook 通知你。但 Webhook 本质上是一个 HTTP 请求，网络会抖动、你的服务可能刚好在重启、部署间隙可能有几秒收不到请求。这时候用户实际已经付了钱，但你的系统不知道。用户会来找你。你如果没有自动补偿机制，就得手动处理。Harness 的做法是：后台每分钟扫描一次所有超过 5 分钟仍然是 PENDING 的订单，主动去 Stripe API 查一下真实状态。如果已经 succeeded，就自动完成权益发放。每小时还有一次全量对账。这样不论 Webhook 丢不丢，你都不会漏单。</div>
+  <h2 class="text-4xl font-medium tracking-tight">我们用 AI 做出了「功能」</h2>
+  <h2 class="text-4xl font-medium tracking-tight mt-2 text-muted">但没做成「生意」</h2>
+  <p class="mt-8 text-xl text-muted max-w-2xl leading-relaxed">
+    痛点不在 AI 的智商，<br>在于我们不知道一个能收钱的产品<span class="text-white">长什么样</span>。
+  </p>
+  <div class="notes">核心问题是：我们有了执行力（AI），但缺少认知。你让 AI 写个聊天界面一分钟就好了，但一个能收钱的 SaaS，它需要支付、需要对账、需要反滥用、需要广告归因、需要用户运营。大部分纯技术背景的人，根本不知道要做这些东西。你都不知道要让 AI 写什么，AI 再聪明也帮不了你。</div>
 </div>
 
-<!-- Slide 4: A2 — Gmail 别名滥用 -->
+<!-- Slide 4: 对比 -->
 <div class="slide" data-slide="4">
-  <p class="text-sm font-mono text-accent uppercase tracking-wider">Action 2 · Gmail 别名滥用</p>
-  <h2 class="text-3xl font-medium tracking-tight mt-4">同一个人，无限个邮箱。</h2>
-  <div class="mt-8 max-w-2xl">
-    <div class="p-5 rounded-lg bg-card border border-white/5 font-mono text-base space-y-2">
+  <h2 class="text-3xl font-medium tracking-tight">AI 可以一句话搞定：</h2>
+  <div class="mt-4 flex flex-wrap gap-2 text-muted">
+    <span class="px-3 py-1.5 text-sm rounded bg-white/5 border border-white/10">登录页</span>
+    <span class="px-3 py-1.5 text-sm rounded bg-white/5 border border-white/10">CRUD</span>
+    <span class="px-3 py-1.5 text-sm rounded bg-white/5 border border-white/10">大模型对话</span>
+    <span class="px-3 py-1.5 text-sm rounded bg-white/5 border border-white/10">Landing Page</span>
+  </div>
+  <h2 class="text-3xl font-medium tracking-tight mt-10">但 AI 没法自己规划这些：</h2>
+  <div class="mt-4 flex flex-wrap gap-2">
+    <span class="px-3 py-1.5 text-sm rounded bg-accent/10 text-accent border border-accent/20">支付状态机 + 掉单补偿</span>
+    <span class="px-3 py-1.5 text-sm rounded bg-accent/10 text-accent border border-accent/20">广告归因回传</span>
+    <span class="px-3 py-1.5 text-sm rounded bg-accent/10 text-accent border border-accent/20">反滥用策略</span>
+    <span class="px-3 py-1.5 text-sm rounded bg-accent/10 text-accent border border-accent/20">定价 A/B 实验</span>
+    <span class="px-3 py-1.5 text-sm rounded bg-accent/10 text-accent border border-accent/20">Chargeback 举证</span>
+    <span class="px-3 py-1.5 text-sm rounded bg-accent/10 text-accent border border-accent/20">用户 LTV 分群</span>
+  </div>
+  <p class="mt-8 text-lg text-muted">不是写不出来，是大部分人不知道要写这些。</p>
+  <div class="notes">具体来说。让 AI 写个登录页、写个 CRUD、接个大模型，这些一分钟就搞定了。但支付掉单补偿、广告服务端回传、Gmail 别名防刷、定价 A/B 实验、Chargeback 举证流程、用户 LTV 分群分析——这些全是你必须做但可能从来没想过的事。不是 AI 写不出代码，是你压根不知道要提这个需求。</div>
+</div>
+
+<!-- Slide 5: 引出 Harness -->
+<div class="slide" data-slide="5">
+  <p class="text-base font-mono text-accent">开源 · velobase/velobase-harness</p>
+  <h2 class="text-4xl font-medium tracking-tight mt-4">把商业化底座标准化</h2>
+  <p class="mt-6 text-xl text-muted max-w-2xl leading-relaxed">
+    我们把赚到钱的这套框架开源了。<br>
+    它不只是代码——通过结构和文档告诉你：<br>
+    <span class="text-white">一个商业化 SaaS 应该长什么样。</span>
+  </p>
+  <p class="mt-4 text-lg text-muted/60">有了图纸，AI 才能精准施工。</p>
+  <div class="notes">所以我们做了 Velobase Harness，一个开源的全栈商业化框架。它最大的价值不是那几万行代码本身，而是通过目录结构和文档，告诉你——你要做一个能赚钱的 SaaS，你需要准备哪些基础能力。说白了它是我们踩了无数坑之后，沉淀出来的一套业务最佳实践。你有了这张图纸，再让 AI 去写代码，效率完全不一样。</div>
+</div>
+
+<!-- Slide 6: 知识点 1 — 支付掉单 -->
+<div class="slide" data-slide="6">
+  <p class="text-sm font-mono text-accent/60 uppercase tracking-wider">Know-how #1</p>
+  <h2 class="text-3xl font-medium tracking-tight mt-3">Stripe Webhook 会丢。<br><span class="text-muted">用户付了钱，你不知道。</span></h2>
+  <div class="mt-6 max-w-2xl space-y-3">
+    <p class="text-lg text-muted">网络抖动、服务重启、部署间隙——Webhook 没收到。<br>订单卡在 PENDING，用户付了钱没权益。</p>
+    <p class="text-lg text-white/80 mt-4">→ 每分钟扫描 PENDING 订单，主动查 Stripe 真实状态。<br>→ 每小时全量对账。不论 Webhook 丢不丢，都不漏单。</p>
+  </div>
+  <div class="notes">第一个知识点：支付掉单。Stripe 通过 Webhook 通知你付款成功，但 Webhook 本质上是一个 HTTP POST，网络会抖动、你的服务可能刚好在重启。Webhook 丢了，用户付了钱你不知道。Harness 的做法是后台每分钟扫描所有超时 PENDING 订单，主动去 Stripe API 查真实状态；每小时还有一次全量对账。这是我们从 scripts/run-payment-reconciliation.ts 和 scripts/detailed-billing-reconcile.ts 中沉淀出来的。</div>
+</div>
+
+<!-- Slide 7: 知识点 2 — Gmail 别名 -->
+<div class="slide" data-slide="7">
+  <p class="text-sm font-mono text-accent/60 uppercase tracking-wider">Know-how #2</p>
+  <h2 class="text-3xl font-medium tracking-tight mt-3">同一个人，无限个邮箱。</h2>
+  <div class="mt-6 max-w-2xl">
+    <div class="p-5 rounded-lg bg-card border border-white/5 font-mono text-base space-y-1">
       <p><span class="text-muted">john.doe</span>@gmail.com</p>
       <p><span class="text-muted">johndoe</span>@gmail.com</p>
       <p><span class="text-muted">j.o.h.n.d.o.e</span>@gmail.com</p>
       <p><span class="text-muted">johndoe+free1</span>@gmail.com</p>
-      <p class="text-accent">↑ 全是同一个人。Gmail 忽略点和加号后缀。</p>
+      <p class="text-accent mt-2">↑ Gmail 忽略点和加号后缀，全是同一个人。</p>
     </div>
-    <div class="mt-6 flex items-start gap-3">
-      <span class="text-green font-mono text-sm mt-1">处理</span>
-      <p class="text-lg text-white/80">注册时自动规整化：去掉点、去掉 + 后缀、统一比对。<br>同一个真实邮箱只能注册一次。</p>
-    </div>
+    <p class="text-lg text-white/80 mt-4">→ 注册时自动规整化：去点、去 + 后缀、统一比对。</p>
   </div>
-  <div class="notes">第二个：Gmail 别名滥用。Gmail 有两个特性大部分开发者不知道：第一，邮箱用户名里的点会被忽略，john.doe 和 johndoe 是同一个邮箱；第二，加号后面的内容也被忽略，johndoe+anything 和 johndoe 是同一个邮箱。这意味着一个人可以用 johndoe、j.ohndoe、johndoe+1、johndoe+2…… 注册无数个账号。如果你的产品有新用户赠送（比如赠 100 积分），一个人可以轻松刷走上万积分。Harness 在注册环节自动做邮箱规整化：去掉所有点、去掉加号后缀，用规整后的邮箱做唯一性校验。同一个真实邮箱只能注册一次。</div>
+  <div class="notes">第二个：Gmail 别名滥用。Gmail 有个特性：用户名里的点会被忽略，加号后面的内容也被忽略。一个人可以用 johndoe、j.o.h.n.d.o.e、johndoe+1 注册无数个账号薅你的免费积分。我们在 scripts/backfill-canonical-email.ts 里做了全量修复，在框架里注册环节自动做邮箱规整化。</div>
 </div>
 
-<!-- Slide 5: A3 — 广告归因回传 -->
-<div class="slide" data-slide="5">
-  <p class="text-sm font-mono text-accent uppercase tracking-wider">Action 3 · 广告归因</p>
-  <h2 class="text-3xl font-medium tracking-tight mt-4">前端追踪被 AdBlock 吃掉。<br><span class="text-muted">你的广告数据全是假的。</span></h2>
-  <div class="mt-8 max-w-2xl space-y-4">
-    <div class="flex items-start gap-3">
-      <span class="text-red font-mono text-sm mt-1">问题</span>
-      <p class="text-lg text-muted">30%+ 用户装了广告拦截。前端 gtag 转化事件根本发不出去。<br>你看到的 ROAS 数据严重失真。</p>
-    </div>
-    <div class="flex items-start gap-3">
-      <span class="text-green font-mono text-sm mt-1">处理</span>
-      <p class="text-lg text-white/80">三层链路：<br>
-        ① 落地页自动采集 <span class="font-mono text-accent/80">gclid / utm_source / fbclid</span> → Cookie<br>
-        ② 注册时写入 User 表，绑定用户身份<br>
-        ③ 付费成功后，<span class="text-accent">服务端</span>离线回传 Google Ads API</p>
-    </div>
-  </div>
-  <div class="notes">第三个：广告归因。你花了钱投 Google Ads，想知道哪个关键词带来了付费用户。常规做法是前端装 gtag 追踪代码。但现实是，30% 以上的用户装了 AdBlock 或类似插件，这些插件会直接屏蔽 gtag 请求。也就是说你的转化数据有三分之一是丢失的。你算出来的 ROAS（广告回报率）是假的，你可能在亏钱的渠道上加预算。Harness 的做法是三层链路。第一层：用户从广告点进来的时候，URL 里有 gclid 这个参数，框架自动采集存到 Cookie。第二层：用户注册时，把 Cookie 里的 gclid 写入数据库 User 表，跟用户身份绑定。第三层：当这个用户某天付费了，后台通过 BullMQ 队列，每 5 分钟批量将转化事件通过 Google Ads API 从服务端上传。服务端回传不经过浏览器，AdBlock 拦不住。这样你的归因数据是准的。</p></div>
-</div>
-
-<!-- Slide 6: A4 — 签到衰减 -->
-<div class="slide" data-slide="6">
-  <p class="text-sm font-mono text-accent uppercase tracking-wider">Action 4 · 签到衰减</p>
-  <h2 class="text-3xl font-medium tracking-tight mt-4">新用户赠送如果不衰减，<br><span class="text-muted">获客成本永远不收敛。</span></h2>
-  <div class="mt-8 max-w-2xl space-y-4">
-    <div class="flex items-start gap-3">
-      <span class="text-red font-mono text-sm mt-1">问题</span>
-      <p class="text-lg text-muted">每天赠 10 积分，用户永远不需要付费。<br>第 100 天注册的用户和第 1 天享受一样的待遇，成本线性增长。</p>
-    </div>
-    <div class="flex items-start gap-3">
-      <span class="text-green font-mono text-sm mt-1">处理</span>
-      <p class="text-lg text-white/80">连续签到衰减：第 1 天赠 10，第 2 天赠 9，第 3 天赠 8……<br>最终收敛到一个最低值。促进留存的同时控制成本。</p>
-    </div>
-  </div>
-  <div class="notes">第四个：签到衰减。很多 AI 产品为了拉新会给新用户每日赠送积分。看起来很合理，但如果每天赠送的量是固定的，那用户永远用免费额度就够了，他没有动力付费。而且你的用户越来越多，每天发出去的积分也越来越多，这是一条线性增长的成本线，永远不收敛。Harness 的做法是签到衰减：第 1 天赠 10 积分，第 2 天赠 9，第 3 天赠 8，逐渐衰减到一个最低值（比如 2）。这样做的效果是：新用户前几天能充分体验产品（促激活），但几天后免费额度不够用了，自然产生付费动力。同时总赠送量是有上界的，成本可控。</div>
-</div>
-
-<!-- Slide 7: A5 — 先发后收 -->
-<div class="slide" data-slide="7">
-  <p class="text-sm font-mono text-accent uppercase tracking-wider">Action 5 · 先发后收</p>
-  <h2 class="text-3xl font-medium tracking-tight mt-4">反滥用不能让正常用户等。</h2>
-  <div class="mt-8 max-w-2xl space-y-4">
-    <div class="flex items-start gap-3">
-      <span class="text-red font-mono text-sm mt-1">问题</span>
-      <p class="text-lg text-muted">如果注册时同步做所有检测（IP 查询、设备指纹、邮箱校验），<br>正常用户也要等 2-3 秒。99% 的人被 1% 的坏人拖慢。</p>
-    </div>
-    <div class="flex items-start gap-3">
-      <span class="text-green font-mono text-sm mt-1">处理</span>
-      <p class="text-lg text-white/80">注册时只做轻量检测（临时邮箱黑名单），立即放行。<br>异步检测同 IP 多账号、设备指纹关联。<br>确认滥用后，自动回收已发放的积分。</p>
-    </div>
-  </div>
-  <div class="notes">第五个：先发后收。反滥用是必须做的，但怎么做很讲究。最直觉的做法是在注册时同步做所有检查：查 IP、查设备指纹、查邮箱是否关联其他账号。但这些检查加起来要 2-3 秒。99% 的正常用户会因为 1% 的坏人，体验到一个很慢的注册流程。Harness 的策略是「先发后收」：注册时只做最轻量的检测——查一下是不是一次性邮箱，如果不是就立即放行，发放新用户积分。然后异步在后台做重量级检测：同 IP 多账号、设备指纹关联、行为模式分析。如果确认是滥用，再自动把已经发给他的积分回收。这样正常用户体验零延迟，坏人最终也拿不到好处。</div>
-</div>
-
-<!-- Slide 8: velobase.io -->
+<!-- Slide 8: 知识点 3 — 广告归因 -->
 <div class="slide" data-slide="8">
-  <p class="text-sm font-mono text-accent uppercase tracking-wider">velobase.io</p>
+  <p class="text-sm font-mono text-accent/60 uppercase tracking-wider">Know-how #3</p>
+  <h2 class="text-3xl font-medium tracking-tight mt-3">前端追踪被 AdBlock 吃掉 30%。<br><span class="text-muted">你的广告数据全是假的。</span></h2>
+  <div class="mt-6 max-w-2xl space-y-3">
+    <p class="text-lg text-muted">前端 gtag 被拦截 → 转化事件发不出去 → ROAS 严重失真。</p>
+    <p class="text-lg text-white/80 mt-4">→ 三层链路：落地页采集 gclid → 注册时绑定用户 → 付费后服务端离线回传 Google Ads API。<br>→ 服务端回传不经过浏览器，AdBlock 拦不住。</p>
+  </div>
+  <div class="notes">第三个：广告归因。你投 Google Ads，前端装 gtag 追踪转化。但 30%+ 用户有 AdBlock，gtag 请求直接被屏蔽。你的 ROAS 数据是假的。Harness 的三层归因：前端采集 gclid 存 Cookie → 注册时写入 User 表 → 付费后通过 BullMQ 队列从服务端批量上传 Google Ads API。这是 scripts/backfill-google-ads-conversions.ts 和 scripts/analyze-ad-efficiency-trend.ts 的实战沉淀。</div>
+</div>
+
+<!-- Slide 9: 知识点 4 — 先发后收 -->
+<div class="slide" data-slide="9">
+  <p class="text-sm font-mono text-accent/60 uppercase tracking-wider">Know-how #4</p>
+  <h2 class="text-3xl font-medium tracking-tight mt-3">反滥用不能让正常用户等。</h2>
+  <div class="mt-6 max-w-2xl space-y-3">
+    <p class="text-lg text-muted">同步检测所有风险（IP / 设备指纹 / 邮箱关联）需要 2-3 秒。<br>99% 正常用户被 1% 坏人拖慢。</p>
+    <p class="text-lg text-white/80 mt-4">→ 「先发后收」：注册时只做轻量检测，立即放行。<br>→ 异步检测同 IP 多账号、设备指纹。确认滥用后回收积分。</p>
+  </div>
+  <div class="notes">第四个：先发后收。反滥用必须做，但不能阻塞正常用户。同步检查 IP、设备指纹、邮箱关联性需要好几秒。Harness 的策略是注册时只查一次性邮箱黑名单（毫秒级），立即放行发积分。后台异步跑 scripts/analyze-abuse.ts 的逻辑：查同 IP 多账号、设备指纹关联。确认是滥用后自动回收积分。正常用户零感知。</div>
+</div>
+
+<!-- Slide 10: 知识点 5 — Chargeback 举证 -->
+<div class="slide" data-slide="10">
+  <p class="text-sm font-mono text-accent/60 uppercase tracking-wider">Know-how #5</p>
+  <h2 class="text-3xl font-medium tracking-tight mt-3">用户付了钱，用完了，再申请退款。<br><span class="text-muted">你有 7 天举证窗口。</span></h2>
+  <div class="mt-6 max-w-2xl space-y-3">
+    <p class="text-lg text-muted">Stripe Dispute：银行冻结资金，你必须提交证据证明服务已交付。<br>证据不足 → 钱退给用户 + 你额外被罚 $15。</p>
+    <p class="text-lg text-white/80 mt-4">→ 自动导出：支付记录 + 服务使用记录 + 登录 IP + 时间线。<br>→ 打包提交 Stripe Evidence API。</p>
+  </div>
+  <div class="notes">第五个：Chargeback 举证。用户在 Stripe 上发起争议（Dispute），银行会直接冻结这笔钱，你有 7 天时间提交证据证明你确实提供了服务。如果你没有自动化的证据收集流程，7 天根本来不及。我们在 scripts/export-evidence-for-stripe.ts 里实现了自动证据导出：拉出该用户的所有支付记录、服务使用记录（什么时间生成了什么内容）、登录 IP，格式化后提交。Harness 把这个流程标准化了。</div>
+</div>
+
+<!-- Slide 11: 知识点 6 — 定价实验 -->
+<div class="slide" data-slide="11">
+  <p class="text-sm font-mono text-accent/60 uppercase tracking-wider">Know-how #6</p>
+  <h2 class="text-3xl font-medium tracking-tight mt-3">定价不能拍脑袋。<br><span class="text-muted">$4.99 还是 $9.99？跑实验。</span></h2>
+  <div class="mt-6 max-w-2xl space-y-3">
+    <p class="text-lg text-muted">50% 用户看到价格 A，50% 看到价格 B。<br>追踪转化率和 ARPU，用数据决策。</p>
+    <p class="text-lg text-white/80 mt-4">→ PostHog Feature Flag + Experiment API 自动创建。<br>→ 框架层集成，改配置即跑实验，不动业务代码。</p>
+  </div>
+  <div class="notes">第六个：定价实验。$4.99 好还是 $9.99 好？不能猜。Harness 集成了 PostHog 的 Feature Flag 和 Experiment API，我们在 scripts/posthog/create-pricing-experiment.ts 里可以一键创建定价 A/B 实验。50% 用户看到价格 A，50% 看到价格 B，追踪实际付费转化率。用数据决策，不靠直觉。框架层面集成意味着你改个配置就能跑实验，不需要动业务代码。</div>
+</div>
+
+<!-- Slide 12: 运营全景 — 日常在干什么 -->
+<div class="slide" data-slide="12">
+  <h2 class="text-3xl font-medium tracking-tight">运营一个 AI SaaS，日常在干什么？</h2>
+  <div class="mt-6 grid grid-cols-3 gap-3 max-w-4xl text-sm">
+    <div class="p-3 rounded bg-card border border-white/5">
+      <p class="text-accent font-medium">财务</p>
+      <p class="text-muted mt-1">逐笔对账 · 汇率核算<br>Stripe 结算周期追踪</p>
+    </div>
+    <div class="p-3 rounded bg-card border border-white/5">
+      <p class="text-accent font-medium">增长</p>
+      <p class="text-muted mt-1">广告 ROI 趋势 · CAC<br>首单 Cohort · LTV 分布</p>
+    </div>
+    <div class="p-3 rounded bg-card border border-white/5">
+      <p class="text-accent font-medium">风控</p>
+      <p class="text-muted mt-1">滥用分析 · 可疑大户调查<br>IP 误封率 · 神秘客识别</p>
+    </div>
+    <div class="p-3 rounded bg-card border border-white/5">
+      <p class="text-accent font-medium">实验</p>
+      <p class="text-muted mt-1">定价 A/B · 漏斗分析<br>转化率诊断 · 留存追踪</p>
+    </div>
+    <div class="p-3 rounded bg-card border border-white/5">
+      <p class="text-accent font-medium">客服</p>
+      <p class="text-muted mt-1">IMAP 收件 · SMTP 回复<br>封禁恶意用户 · 工单管理</p>
+    </div>
+    <div class="p-3 rounded bg-card border border-white/5">
+      <p class="text-accent font-medium">营销</p>
+      <p class="text-muted mt-1">优惠码生成 · 节日活动<br>Discord 公告 · 邮件群发</p>
+    </div>
+  </div>
+  <p class="mt-4 text-lg text-muted">这些全是代码之外的事。一个人做，必须有系统支撑。</p>
+  <div class="notes">刚才讲了6个具体的坑。但运营一个 AI SaaS，日常实际要做的远不止这些。我们的 scripts 目录有 200 多个脚本，覆盖财务对账、广告 ROI 分析、反滥用调查、定价实验、客服回复、营销活动。这些全是代码之外的事情。一个人做这些，必须有系统化的工具支撑，否则精力会被碎片化运营彻底吃掉。</div>
+</div>
+
+<!-- Slide 13: 配置即启动 -->
+<div class="slide" data-slide="13">
+  <h2 class="text-3xl font-medium tracking-tight">配置即启动，代码只写业务</h2>
+  <div class="mt-8 p-6 rounded-lg bg-[#0d0d22] border border-white/5 font-mono text-sm leading-relaxed max-w-2xl shadow-xl">
+    <span class="text-muted/50"># 填了就开，不需要改代码</span><br>
+    <span class="text-purple-300">STRIPE_SECRET_KEY</span>=<span class="text-green-400">sk_live_...</span><br>
+    <span class="text-purple-300">GOOGLE_ADS_CUSTOMER_ID</span>=<span class="text-green-400">123-456-7890</span><br>
+    <span class="text-purple-300">POSTHOG_KEY</span>=<span class="text-green-400">phc_...</span><br>
+    <span class="text-purple-300">ENABLE_ANTI_ABUSE</span>=<span class="text-green-400">true</span><br>
+    <br>
+    <span class="text-muted/50"># 一套代码，三个进程</span><br>
+    <span class="text-accent">SERVICE_MODE=all</span>  <span class="text-muted/50"># 本地全合一</span><br>
+    <span class="text-accent">SERVICE_MODE=web,api,worker</span>  <span class="text-muted/50"># 生产分开跑</span>
+  </div>
+  <p class="mt-6 text-lg text-muted">可插拔模块 + 事件总线。业务成长到哪一步，就启用哪个模块。</p>
+  <div class="notes">使用方式很简单。环境变量驱动——填了 Stripe key，支付模块就开了；填了 Google Ads ID，归因就自动跑；PostHog key 填上，埋点和实验就有了。核心设计是可插拔模块加事件总线，所有模块通过事件解耦。比如 payment:succeeded 这个事件触发后，会自动通知广告归因模块回传转化、通知飞书发运营消息、通知 PostHog 记录付费事件。你的业务成长到哪一步，就启用哪个模块，不需要重构。</div>
+</div>
+
+<!-- Slide 14: 底座能力总览 -->
+<div class="slide" data-slide="14">
+  <h2 class="text-3xl font-medium tracking-tight">开箱即用的商业化底座</h2>
+  <div class="mt-6 grid grid-cols-2 gap-4 max-w-3xl">
+    <div class="p-4 rounded-lg bg-card border border-white/5">
+      <p class="text-accent text-sm font-medium">计费引擎</p>
+      <p class="mt-1 text-sm text-muted">积分 + 订阅 + 优惠码<br>Stripe / Crypto / Telegram Stars</p>
+    </div>
+    <div class="p-4 rounded-lg bg-card border border-white/5">
+      <p class="text-accent text-sm font-medium">反滥用</p>
+      <p class="mt-1 text-sm text-muted">临时邮箱 · Gmail trick · 设备指纹<br>先发后收 · 风险评分</p>
+    </div>
+    <div class="p-4 rounded-lg bg-card border border-white/5">
+      <p class="text-accent text-sm font-medium">广告归因</p>
+      <p class="mt-1 text-sm text-muted">三层链路 · 服务端回传<br>Google / Twitter / PropellerAds</p>
+    </div>
+    <div class="p-4 rounded-lg bg-card border border-white/5">
+      <p class="text-accent text-sm font-medium">数据 & 实验</p>
+      <p class="mt-1 text-sm text-muted">PostHog 全栈 · Feature Flag<br>A/B 定价 · 漏斗分析</p>
+    </div>
+    <div class="p-4 rounded-lg bg-card border border-white/5">
+      <p class="text-accent text-sm font-medium">用户触达</p>
+      <p class="mt-1 text-sm text-muted">邮件双通道 · 生命周期管理<br>飞书 / Telegram 运营通知</p>
+    </div>
+    <div class="p-4 rounded-lg bg-card border border-white/5">
+      <p class="text-accent text-sm font-medium">分销系统</p>
+      <p class="mt-1 text-sm text-muted">推荐追溯 · 佣金模型<br>防刷 · 裂变引擎</p>
+    </div>
+  </div>
+  <div class="notes">总体来看，Harness 提供的商业化底座包括：计费引擎（积分+订阅+多网关）、反滥用（我们刚讲的那些）、广告归因（三层链路）、数据实验（PostHog 全栈集成）、用户触达（邮件+生命周期+通知）、分销系统（佣金追踪和防刷）。这些全是开箱即用的，填环境变量就启用。</div>
+</div>
+
+<!-- Slide 15: velobase.io -->
+<div class="slide" data-slide="15">
+  <p class="text-base font-mono text-accent">velobase.io</p>
   <h2 class="text-4xl font-medium tracking-tight mt-4">计费即服务</h2>
   <p class="mt-6 text-xl text-muted max-w-2xl leading-relaxed">
-    不想自己维护支付状态机、订单补偿、对账逻辑？<br>
-    直接接入 velobase.io，把「收钱」这件事交给我们。
+    不想自己跑对账任务、维护支付状态机？<br>
+    直接接 API。收钱这件事交给我们。
   </p>
   <div class="mt-8 flex flex-wrap gap-3">
     <span class="px-4 py-2 text-sm rounded bg-accent/10 text-accent border border-accent/20">积分 + 订阅</span>
@@ -188,12 +291,12 @@ html, body { height: 100%; overflow: hidden; background: #0a0a1a; }
     <span class="px-4 py-2 text-sm rounded bg-accent/10 text-accent border border-accent/20">自动对账</span>
     <span class="px-4 py-2 text-sm rounded bg-accent/10 text-accent border border-accent/20">Webhook 补偿</span>
   </div>
-  <div class="notes">刚才讲的支付掉单、对账这些问题，如果你不想自己维护这套逻辑，可以直接用 velobase.io。它是我们基于 Harness 支付模块抽出来的独立服务——计费即服务。积分、订阅、多网关、自动对账、Webhook 补偿全包了。你只需要调 API，不需要自己跑补偿任务。</div>
+  <div class="notes">如果你不想自己维护支付状态机和对账逻辑，可以直接用 velobase.io——我们从 Harness 里抽出来的计费 SaaS。调 API 就能收钱，对账补偿全自动。</div>
 </div>
 
-<!-- Slide 9: velobase.cloud -->
-<div class="slide" data-slide="9">
-  <p class="text-sm font-mono text-accent uppercase tracking-wider">velobase.cloud</p>
+<!-- Slide 16: velobase.cloud -->
+<div class="slide" data-slide="16">
+  <p class="text-base font-mono text-accent">velobase.cloud</p>
   <h2 class="text-4xl font-medium tracking-tight mt-4">Git Push → 上线</h2>
   <div class="mt-8 flex flex-wrap gap-3">
     <span class="px-4 py-2 text-sm rounded bg-accent/10 text-accent border border-accent/20">PostgreSQL</span>
@@ -202,78 +305,98 @@ html, body { height: 100%; overflow: hidden; background: #0a0a1a; }
     <span class="px-4 py-2 text-sm rounded bg-accent/10 text-accent border border-accent/20">自动 SSL</span>
     <span class="px-4 py-2 text-sm rounded bg-accent/10 text-accent border border-accent/20">自定义域名</span>
   </div>
-  <p class="mt-6 text-lg text-muted">为 Harness 优化的云部署。让「运维」不再成为绊脚石。</p>
-  <div class="notes">有了框架和计费，最后是部署。velobase.cloud 是为 Harness 生态优化的云平台。Git push 就上线，数据库、Redis、对象存储、SSL 证书全帮你搞好。你不用花时间在 DevOps 上。</div>
+  <p class="mt-6 text-lg text-muted">原生理解 Harness 三进程结构。零配置部署。</p>
+  <div class="notes">部署是另一个吃时间的事。velobase.cloud 原生理解 Harness 的三进程架构，git push 上去就自动构建部署，数据库、Redis、对象存储、SSL、自定义域名全包。别花时间在运维上。</div>
 </div>
 
-<!-- Slide 10: Furthermore — WIP -->
-<div class="slide" data-slide="10">
-  <p class="text-sm font-mono text-accent uppercase tracking-wider">Furthermore · WIP</p>
-  <h2 class="text-3xl font-medium tracking-tight mt-4">不止于框架。正在做的事：</h2>
-  <div class="mt-8 grid grid-cols-2 gap-4 max-w-3xl">
+<!-- Slide 17: WIP -->
+<div class="slide" data-slide="17">
+  <p class="text-sm font-mono text-accent/60 uppercase tracking-wider">Furthermore · WIP</p>
+  <h2 class="text-3xl font-medium tracking-tight mt-3">正在补齐的拼图</h2>
+  <div class="mt-6 grid grid-cols-2 gap-4 max-w-3xl">
     <div class="p-4 rounded-lg bg-card border border-white/5">
       <p class="text-accent text-sm font-medium">客服邮件</p>
-      <p class="mt-1 text-sm text-muted">Support Email 管理 + SMTP 收发</p>
+      <p class="mt-1 text-sm text-muted">IMAP 收件 + SMTP 回复<br>工单管理 · 自动分类</p>
     </div>
     <div class="p-4 rounded-lg bg-card border border-white/5">
-      <p class="text-accent text-sm font-medium">Discord 社群运营</p>
-      <p class="mt-1 text-sm text-muted">Bot 自动化：欢迎、角色、通知</p>
+      <p class="text-accent text-sm font-medium">Discord 社群</p>
+      <p class="mt-1 text-sm text-muted">Bot 自动化 · 频道搭建<br>公告 · Feature 投票</p>
     </div>
     <div class="p-4 rounded-lg bg-card border border-white/5">
       <p class="text-accent text-sm font-medium">X / Twitter 推广</p>
-      <p class="mt-1 text-sm text-muted">内容发布、互动追踪、增长自动化</p>
+      <p class="mt-1 text-sm text-muted">内容发布 · 互动追踪<br>增长自动化</p>
     </div>
     <div class="p-4 rounded-lg bg-card border border-white/5">
       <p class="text-accent text-sm font-medium">开放 API</p>
-      <p class="mt-1 text-sm text-muted">让用户通过 API 接入你的产品</p>
+      <p class="mt-1 text-sm text-muted">API Key 管理 · 用量计量<br>开发者文档生成</p>
     </div>
   </div>
-  <p class="mt-6 text-lg text-muted">框架会持续补齐独立开发者商业化的每一块拼图。</p>
-  <div class="notes">除了刚才讲的这些已经上线的模块，我们还在持续扩展 Harness 的能力。正在做的包括：Support Email 管理——用 SMTP 收发客服邮件，不依赖第三方 helpdesk；Discord 社群运营——Bot 自动化，欢迎新人、分配角色、转发通知；X/Twitter 推广——内容发布和互动追踪的自动化；以及开放 API 模块——让你的产品可以提供 API 给用户调用。这些都在开发中，目标是让框架覆盖独立开发者商业化的每一个环节。</div>
+  <p class="mt-4 text-lg text-muted">目标：覆盖独立开发者商业化的每一个环节。</p>
+  <div class="notes">除了已经上线的模块，我们还在持续扩展。客服邮件（IMAP 收发 + 工单管理）、Discord 社群运营（Bot 自动化，我们自己的 Discord 就是用 scripts/discord/ 里的脚本搭的）、X/Twitter 推广自动化、开放 API 模块。目标是让框架覆盖独立开发者商业化的每一个环节。</div>
 </div>
 
-<!-- Slide 11: R — Result -->
-<div class="slide" data-slide="11">
-  <p class="text-sm font-mono text-accent uppercase tracking-wider">Result</p>
-  <h2 class="text-4xl font-medium tracking-tight mt-4">单人操盘，数万美金。</h2>
-  <div class="mt-8 max-w-2xl space-y-4">
-    <p class="text-xl text-muted">我们团队用这套框架，单人并行操盘多个 AI SaaS 产品。</p>
-    <p class="text-xl text-white/80">已产生数万美金真实收入。</p>
-    <p class="text-lg text-muted mt-6">不是因为我们特别厉害，<br>而是框架把商业化的脏活累活都做完了，<br>人只需要专注产品本身。</p>
+<!-- Slide 18: 组织架构 -->
+<div class="slide" data-slide="18">
+  <h2 class="text-4xl font-medium tracking-tight">一个人 = 一整个商业闭环</h2>
+  <div class="mt-8 flex flex-wrap gap-2 max-w-3xl">
+    <span class="px-3 py-1.5 text-sm rounded bg-accent/10 text-accent border border-accent/20">写代码</span>
+    <span class="px-3 py-1.5 text-sm rounded bg-accent/10 text-accent border border-accent/20">广告投放</span>
+    <span class="px-3 py-1.5 text-sm rounded bg-accent/10 text-accent border border-accent/20">数据分析</span>
+    <span class="px-3 py-1.5 text-sm rounded bg-accent/10 text-accent border border-accent/20">客服回复</span>
+    <span class="px-3 py-1.5 text-sm rounded bg-accent/10 text-accent border border-accent/20">社群运营</span>
+    <span class="px-3 py-1.5 text-sm rounded bg-accent/10 text-accent border border-accent/20">定价实验</span>
+    <span class="px-3 py-1.5 text-sm rounded bg-accent/10 text-accent border border-accent/20">财务对账</span>
+    <span class="px-3 py-1.5 text-sm rounded bg-accent/10 text-accent border border-accent/20">反滥用</span>
   </div>
-  <div class="notes">结果是什么？我们自己用这套框架，做到了单人并行操盘多个 AI SaaS 产品——从开发到投放到收钱到反滥用，一个人搞定。目前已经产生了数万美金的真实收入。这不是因为我们团队特别强，而是因为框架把商业化过程中那些琐碎但关键的模块都预置好了。开发者只需要专注于打磨 AI 核心功能和理解用户需求。</div>
+  <p class="mt-8 text-xl text-white/80">人提供认知，AI + 框架提供执行力。</p>
+  <p class="mt-2 text-xl text-muted">成为指挥官，不是打字员。</p>
+  <div class="notes">在我们团队，一个人负责一个产品的完整商业闭环——写代码、投广告、看数据、回客服、管社群、跑实验、做对账、防滥用。听起来不可能，但有了 Harness 作为底座，再加上 AI 作为执行力，一个人确实可以覆盖这些。关键是：你的认知覆盖面够广，然后把执行交给工具。</div>
 </div>
 
-<!-- Slide 12: 结尾 -->
-<div class="slide" data-slide="12">
-  <h2 class="text-4xl font-medium tracking-tight leading-snug">100% 开源。<br><span class="text-muted">拿去用。</span></h2>
-  <div class="mt-10 flex flex-col gap-6 max-w-xl">
+<!-- Slide 19: 验证 -->
+<div class="slide" data-slide="19">
+  <h2 class="text-4xl font-medium tracking-tight">用自己的狗粮，喂出真实结果</h2>
+  <p class="mt-6 text-xl text-muted max-w-2xl leading-relaxed">
+    基于 Harness + io + Cloud 构建的产品<br>
+    由单人操盘<br><br>
+    <span class="text-white/90">已产生数万美金的真实收入。</span>
+  </p>
+  <p class="mt-6 text-lg text-muted/60">证明这条路普通人能走通。</p>
+  <div class="notes">这不是理论框架。我们自己用完全相同的代码做产品，单人操盘，跑通了完整的商业闭环，赚到了真金白银。框架里的每一个模块、每一个脚本，都经历过真实用户和真实收入的考验。</div>
+</div>
+
+<!-- Slide 20: 结尾 -->
+<div class="slide" data-slide="20">
+  <h2 class="text-4xl font-medium tracking-tight leading-snug">
+    画好商业化的图纸，<br>
+    让 AI 专注施工。
+  </h2>
+  <div class="mt-10 flex flex-col gap-4 max-w-xl">
     <div class="flex items-center gap-3">
-      <span class="text-muted w-16 text-sm">框架</span>
-      <span class="font-mono text-xl text-accent">github.com/velobase/velobase-harness</span>
+      <span class="text-muted w-12 text-sm">框架</span>
+      <span class="font-mono text-lg text-accent">github.com/velobase/velobase-harness</span>
     </div>
     <div class="flex items-center gap-3">
-      <span class="text-muted w-16 text-sm">计费</span>
-      <span class="font-mono text-xl text-accent">velobase.io</span>
+      <span class="text-muted w-12 text-sm">计费</span>
+      <span class="font-mono text-lg text-accent">velobase.io</span>
     </div>
     <div class="flex items-center gap-3">
-      <span class="text-muted w-16 text-sm">云端</span>
-      <span class="font-mono text-xl text-accent">velobase.cloud</span>
+      <span class="text-muted w-12 text-sm">云端</span>
+      <span class="font-mono text-lg text-accent">velobase.cloud</span>
     </div>
     <div class="flex items-center gap-3">
-      <span class="text-muted w-16 text-sm">社区</span>
-      <span class="font-mono text-xl text-accent">discord.gg/eAK6Sfw5c6</span>
+      <span class="text-muted w-12 text-sm">社区</span>
+      <span class="font-mono text-lg text-accent">discord.gg/eAK6Sfw5c6</span>
     </div>
-    <div class="text-muted text-base mt-2">填环境变量启用，不改代码。</div>
   </div>
-  <p class="mt-10 text-base text-muted/40">Jerry · Velobase</p>
-  <div class="notes">Velobase Harness 完全开源。刚才讲的所有模块都在里面，代码和文档都有。你如果也在做 AI SaaS，可以直接克隆下来用，省掉这些踩坑的时间。谢谢大家。</div>
+  <p class="mt-8 text-base text-muted/40">Jerry · Velobase</p>
+  <div class="notes">总结一下。AI 写代码不是瓶颈了。瓶颈是我们人类自己——知不知道一个商业化产品应该长什么样。Harness 就是我们踩了一年坑画出来的那张图纸，现在开源了。欢迎加 Discord 聊，或者直接去 GitHub 看代码。谢谢大家。</div>
 </div>
 
 </div>
 
 <div class="fixed bottom-6 right-8 text-sm font-mono text-muted/40 z-50 select-none">
-  <span id="current">1</span> / <span id="total">9</span>
+  <span id="current">1</span> / <span id="total">20</span>
 </div>
 <div class="fixed bottom-6 left-8 text-xs text-white/20 z-50 select-none hidden md:block">
   ← → 翻页 · N 讲稿 · F 全屏
@@ -282,7 +405,7 @@ html, body { height: 100%; overflow: hidden; background: #0a0a1a; }
 <script>
 const slides = document.querySelectorAll('.slide');
 const total = slides.length;
-let current = parseInt(localStorage.getItem('opc-slide-v7') || '1');
+let current = parseInt(localStorage.getItem('opc-slide-v8') || '1');
 document.getElementById('total').textContent = total;
 
 function show(n) {
@@ -292,7 +415,7 @@ function show(n) {
   slides.forEach(s => s.classList.remove('active'));
   slides[current - 1].classList.add('active');
   document.getElementById('current').textContent = current;
-  localStorage.setItem('opc-slide-v7', current);
+  localStorage.setItem('opc-slide-v8', current);
 }
 show(current);
 
