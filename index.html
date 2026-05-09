@@ -3,420 +3,198 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OPC × Velobase — 42章经</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Source+Code+Pro:wght@400;500;700&display=swap" rel="stylesheet">
-<style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  --bg: #0a0a1a;
-  --bg-card: #12122a;
-  --text: #e8e8f0;
-  --text-muted: #8888aa;
-  --accent: #533afd;
-  --accent-soft: rgba(83, 58, 253, 0.15);
-  --border: rgba(255,255,255,0.08);
-  --green: #15be53;
-  --ruby: #ea2261;
-  --font: 'Inter', -apple-system, 'PingFang SC', 'Noto Sans SC', system-ui, sans-serif;
-  --mono: 'Source Code Pro', ui-monospace, monospace;
+<title>不要让人类限制了 AI — Jerry / Velobase</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Inter', '-apple-system', 'PingFang SC', 'Noto Sans SC', 'system-ui', 'sans-serif'],
+        mono: ['Source Code Pro', 'ui-monospace', 'monospace'],
+      },
+      colors: {
+        bg: '#0a0a1a',
+        card: '#12122a',
+        accent: '#533afd',
+        muted: '#8888aa',
+        green: '#15be53',
+      }
+    }
+  }
 }
-
-html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: var(--font); }
-
-.deck { width: 100vw; height: 100vh; position: relative; }
-
+</script>
+<style>
+html, body { height: 100%; overflow: hidden; }
 .slide {
   position: absolute; inset: 0;
-  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  display: flex; flex-direction: column; justify-content: center;
   padding: 80px 120px;
   opacity: 0; pointer-events: none;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.35s ease;
 }
 .slide.active { opacity: 1; pointer-events: auto; }
-
-h1 {
-  font-size: 48px; font-weight: 500; letter-spacing: -1px;
-  line-height: 1.15; text-align: center; margin-bottom: 24px;
-}
-h2 {
-  font-size: 36px; font-weight: 500; letter-spacing: -0.5px;
-  line-height: 1.2; margin-bottom: 20px;
-}
-h3 {
-  font-size: 24px; font-weight: 500; letter-spacing: -0.3px;
-  line-height: 1.25; margin-bottom: 16px;
-}
-p, li {
-  font-size: 20px; font-weight: 400; line-height: 1.6;
-  color: var(--text-muted);
-}
-p { margin-bottom: 12px; }
-
-.subtitle {
-  font-size: 22px; color: var(--text-muted); font-weight: 400;
-  text-align: center;
-}
-
-ul { list-style: none; padding: 0; }
-ul li { padding: 8px 0; padding-left: 24px; position: relative; }
-ul li::before {
-  content: ''; position: absolute; left: 0; top: 18px;
-  width: 8px; height: 8px; border-radius: 50%;
-  background: var(--accent);
-}
-
-.two-col {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
-  width: 100%; align-items: start;
-}
-
-.col-label {
-  font-size: 14px; font-weight: 500; text-transform: uppercase;
-  letter-spacing: 1.5px; margin-bottom: 16px;
-}
-.col-label.gray { color: var(--text-muted); }
-.col-label.accent { color: var(--accent); }
-.col-label.green { color: var(--green); }
-
-.card {
-  background: var(--bg-card); border: 1px solid var(--border);
-  border-radius: 6px; padding: 32px; margin-bottom: 16px;
-}
-
-.code-block {
-  background: #0d0d22; border: 1px solid var(--border);
-  border-radius: 6px; padding: 24px 32px;
-  font-family: var(--mono); font-size: 16px; line-height: 1.8;
-  color: var(--text-muted); width: 100%; max-width: 700px;
-  text-align: left;
-}
-.code-block .key { color: #b9b9f9; }
-.code-block .val { color: var(--green); }
-.code-block .comment { color: #555577; }
-
-.highlight { color: var(--text); font-weight: 400; }
-.accent-text { color: var(--accent); }
-.green-text { color: var(--green); }
-
-.big-number {
-  font-size: 72px; font-weight: 300; letter-spacing: -2px;
-  color: var(--text); line-height: 1;
-}
-
-.flow-row {
-  display: flex; align-items: center; gap: 16px;
-  margin: 12px 0; font-size: 20px;
-}
-.flow-row .arrow { color: var(--accent); font-size: 24px; }
-.flow-row .result { color: var(--green); }
-
-.tag {
-  display: inline-block; padding: 4px 12px; border-radius: 4px;
-  font-size: 14px; font-weight: 400; margin: 4px;
-}
-.tag.purple { background: var(--accent-soft); color: #b9b9f9; border: 1px solid rgba(83,58,253,0.3); }
-.tag.dim { background: rgba(255,255,255,0.03); color: var(--text-muted); border: 1px solid var(--border); }
-
-.progress {
-  position: fixed; bottom: 32px; right: 40px;
-  font-size: 14px; color: var(--text-muted); font-family: var(--mono);
-  z-index: 100;
-}
-
-.nav-hint {
-  position: fixed; bottom: 32px; left: 40px;
-  font-size: 13px; color: rgba(255,255,255,0.2);
-  z-index: 100;
-}
-
-/* Slide-specific layouts */
-.slide.left-align { align-items: flex-start; }
-.slide.left-align h2, .slide.left-align h3 { text-align: left; }
-
-.quote {
-  font-size: 32px; font-weight: 300; font-style: italic;
-  color: var(--text); line-height: 1.4;
-  border-left: 3px solid var(--accent); padding-left: 24px;
-  max-width: 800px;
-}
-
-.final-links {
-  display: flex; gap: 40px; margin-top: 40px;
-}
-.final-links a {
-  color: var(--accent); text-decoration: none; font-size: 18px;
-  border-bottom: 1px solid rgba(83,58,253,0.3);
-  padding-bottom: 2px;
-}
-
 @media (max-width: 768px) {
-  .slide { padding: 40px 32px; }
-  h1 { font-size: 36px; }
-  h2 { font-size: 28px; }
-  h3 { font-size: 22px; }
-  p, li { font-size: 18px; }
-  .two-col { grid-template-columns: 1fr; gap: 32px; }
-  .big-number { font-size: 48px; }
-  .quote { font-size: 24px; }
+  .slide { padding: 40px 24px; }
 }
 </style>
 </head>
-<body>
-<div class="deck">
+<body class="bg-bg text-white font-sans">
+<div class="relative w-screen h-screen">
 
-<!-- Slide 1: Title -->
+<!-- Slide 1: 封面 -->
 <div class="slide active" data-slide="1">
-  <h1>一人公司，真实盈利</h1>
-  <p class="subtitle" style="margin-top: 8px;">不是方法论，是工程验证</p>
-  <p class="subtitle" style="margin-top: 40px; font-size: 18px; color: rgba(255,255,255,0.3);">Jerry · Velobase · 42章经</p>
+  <h1 class="text-5xl font-medium tracking-tight leading-tight">不要让人类限制了 AI</h1>
+  <p class="mt-6 text-xl text-muted">一人公司商业化实践</p>
+  <p class="mt-12 text-base text-muted/50">Jerry · Velobase · 42章经</p>
 </div>
 
-<!-- Slide 2: Facts -->
+<!-- Slide 2: 观察 -->
 <div class="slide" data-slide="2">
-  <div style="max-width: 600px; text-align: left;">
-    <p style="font-size: 26px; color: var(--text); line-height: 1.8;">
-      一个人做的。<br>
-      没拿融资。<br>
-      已经盈利，还在增长。
-    </p>
-    <p style="margin-top: 32px; font-size: 20px; color: var(--text-muted);">
-      不是天才，也不是卷王。<br>
-      只是把时间花对了地方。
-    </p>
-  </div>
+  <h2 class="text-4xl font-medium tracking-tight leading-snug">AI 写代码越来越强了。</h2>
+  <h2 class="text-4xl font-medium tracking-tight leading-snug mt-4 text-muted">但大部分一人公司，还是不赚钱。</h2>
 </div>
 
-<!-- Slide 3: The question -->
+<!-- Slide 3: 误诊 -->
 <div class="slide" data-slide="3">
-  <h1 style="font-size: 48px;">一个人怎么可能？</h1>
-  <p class="subtitle" style="margin-top: 24px;">答案不是「我很卷」</p>
-  <p class="subtitle">是「我只做值得用人脑做的事」</p>
+  <p class="text-2xl text-muted">我们总觉得——</p>
+  <h2 class="text-4xl font-medium tracking-tight mt-4">「是 AI 写得不够复杂。」</h2>
+  <p class="mt-8 text-xl text-muted">我看了很多死掉的项目，发现根本不是这么回事。</p>
 </div>
 
-<!-- Slide 4: AI makes code cheap -->
-<div class="slide left-align" data-slide="4">
-  <h2>AI 时代，代码不值钱了</h2>
-  <div style="margin-top: 32px;">
-    <p style="font-size: 24px; color: var(--text);">这些事，AI 一秒就能写完：</p>
-    <div style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 8px;">
-      <span class="tag dim">基础登录页</span>
-      <span class="tag dim">AI 聊天接口</span>
-      <span class="tag dim">CRUD 后台</span>
-      <span class="tag dim">单一支付接入</span>
-      <span class="tag dim">基础邮件发送</span>
-      <span class="tag dim">Landing Page</span>
-    </div>
-    <p style="margin-top: 32px; font-size: 20px;">不是壁垒，不产生差异化。</p>
-  </div>
+<!-- Slide 4: 真正的瓶颈 -->
+<div class="slide" data-slide="4">
+  <h2 class="text-4xl font-medium tracking-tight">我们做出了「功能」</h2>
+  <h2 class="text-4xl font-medium tracking-tight mt-2 text-muted">但没做成「生意」</h2>
+  <p class="mt-8 text-xl text-muted max-w-2xl">一个能收钱的 SaaS，需要支付、积分、防刷、分销。<br>没做过生意的人，连这些需求都提不出来。</p>
 </div>
 
-<!-- Slide 5: What matters -->
-<div class="slide left-align" data-slide="5">
-  <h2>真正值钱的是<span class="accent-text">业务认知</span></h2>
-  <div style="margin-top: 32px;">
-    <p style="font-size: 24px; color: var(--text);">这些事，AI 写不了——因为答案不在代码里：</p>
-    <ul style="margin-top: 20px;">
-      <li><span class="highlight">定价怎么定？积分送多少？怎么引导付费？</span></li>
-      <li><span class="highlight">A/B 跑出来哪个方案赢？转化率卡在哪？</span></li>
-      <li><span class="highlight">什么行为算滥用？阈值多少？误杀率多少？</span></li>
-      <li><span class="highlight">分销佣金给多少？怎么防刷？怎么激励？</span></li>
-      <li><span class="highlight">多端登录体验怎么做到每个端都对？</span></li>
-    </ul>
-  </div>
+<!-- Slide 5: 核心洞察 -->
+<div class="slide" data-slide="5">
+  <h2 class="text-4xl font-medium tracking-tight leading-snug max-w-3xl">不是 AI 不行，<br>是我们不知道该让 AI 做什么。</h2>
+  <p class="mt-8 text-xl text-muted max-w-2xl">人类是 AI 的使用主体。<br>一人公司能不能成，取决于这个「一人」的认知水平。</p>
 </div>
 
-<!-- Slide 6: The line -->
+<!-- Slide 6: Harness 定位 -->
 <div class="slide" data-slide="6">
-  <h2 style="text-align: center;">精力分配的分界线</h2>
-  <div class="two-col" style="margin-top: 48px; max-width: 900px;">
-    <div>
-      <p class="col-label gray">AI / Boilerplate 能做</p>
-      <p>写代码</p>
-      <p>画界面</p>
-      <p>接 API</p>
-      <p>部署上线</p>
-      <p style="margin-top: 16px; font-size: 18px; color: rgba(255,255,255,0.3);">执行速度 → 机器赢</p>
-    </div>
-    <div>
-      <p class="col-label accent">必须人做</p>
-      <p>用户洞察</p>
-      <p>产品判断</p>
-      <p>定价策略</p>
-      <p>数据决策</p>
-      <p style="margin-top: 16px; font-size: 18px; color: var(--accent);">认知密度 → 人赢</p>
-    </div>
-  </div>
+  <p class="text-base font-mono text-accent">velobase/velobase-harness</p>
+  <h2 class="text-4xl font-medium tracking-tight mt-4">框架 + 文档 = 认知传递</h2>
+  <p class="mt-6 text-xl text-muted max-w-2xl">它的价值不是代码本身。<br>是通过结构和文档告诉你：一个商业化 SaaS 应该具备哪些基础能力。</p>
+  <p class="mt-4 text-lg text-muted/60">这是很多研发缺失的认知——不是技术认知，是业务认知。</p>
 </div>
 
-<!-- Slide 7: Harness intro -->
+<!-- Slide 7: AI能做的 vs 不能的 -->
 <div class="slide" data-slide="7">
-  <a href="https://github.com/velobase/velobase-harness" target="_blank" style="color: var(--accent); text-decoration: none; font-family: var(--mono); font-size: 20px; border-bottom: 1px solid rgba(83,58,253,0.3); padding-bottom: 2px;">velobase/velobase-harness</a>
-  <h2 style="margin-top: 24px;">业务认知的基础设施</h2>
-  <p class="subtitle" style="margin-top: 16px; max-width: 700px;">不是帮你写代码。是把业务认知的地基搭好，<br>让你专注于调参和决策。</p>
-  <p style="margin-top: 40px; font-size: 18px; color: rgba(255,255,255,0.3);">不是模板。是已经在生产跑着、在赚钱的东西。</p>
-</div>
-
-<!-- Slide 8: A/B Testing -->
-<div class="slide left-align" data-slide="8">
-  <h3 style="color: var(--accent);">01</h3>
-  <h2>PostHog + A/B 测试</h2>
-  <div style="margin-top: 24px; max-width: 800px;">
-    <p style="color: var(--text); font-size: 22px;">一人公司没有产品经理替你拍脑袋。</p>
-    <p style="color: var(--text); font-size: 22px;">数据就是你的产品经理。</p>
-    <div style="margin-top: 32px;">
-      <div class="flow-row"><span>改了定价</span> <span class="arrow">→</span> <span class="result">跑个实验</span></div>
-      <div class="flow-row"><span>改了落地页</span> <span class="arrow">→</span> <span class="result">跑个实验</span></div>
-      <div class="flow-row"><span>改了漏斗</span> <span class="arrow">→</span> <span class="result">跑个实验</span></div>
-    </div>
-    <p style="margin-top: 32px; font-size: 18px;">从框架层保证：每个业务变更都能被测量。</p>
+  <h2 class="text-3xl font-medium tracking-tight">AI 一句话能搞定的：</h2>
+  <div class="mt-4 flex flex-wrap gap-2">
+    <span class="px-3 py-1 text-sm rounded bg-white/5 text-muted border border-white/10">登录页</span>
+    <span class="px-3 py-1 text-sm rounded bg-white/5 text-muted border border-white/10">CRUD</span>
+    <span class="px-3 py-1 text-sm rounded bg-white/5 text-muted border border-white/10">Landing Page</span>
+    <span class="px-3 py-1 text-sm rounded bg-white/5 text-muted border border-white/10">聊天接口</span>
   </div>
-</div>
-
-<!-- Slide 9: Multi-platform auth -->
-<div class="slide left-align" data-slide="9">
-  <h3 style="color: var(--accent);">02</h3>
-  <h2>精细化多端登录</h2>
-  <div style="margin-top: 24px; max-width: 800px;">
-    <p style="color: var(--text); font-size: 22px;">NextAuth 三行代码的事？不是。</p>
-    <div style="margin-top: 24px; display: flex; flex-wrap: wrap; gap: 12px;">
-      <span class="tag purple">Web</span>
-      <span class="tag purple">移动端</span>
-      <span class="tag purple">Telegram Bot</span>
-      <span class="tag purple">API Token</span>
-    </div>
-    <p style="margin-top: 24px;">四条路径，统一身份，各端体验不同。</p>
-    <p>这个「对」，是靠踩坑踩出来的，不是靠生成出来的。</p>
+  <h2 class="text-3xl font-medium tracking-tight mt-10">AI 一句话搞不定的：</h2>
+  <div class="mt-4 flex flex-wrap gap-2">
+    <span class="px-3 py-1 text-sm rounded bg-accent/10 text-accent border border-accent/20">精细化多端登录</span>
+    <span class="px-3 py-1 text-sm rounded bg-accent/10 text-accent border border-accent/20">积分+订阅+多网关计费</span>
+    <span class="px-3 py-1 text-sm rounded bg-accent/10 text-accent border border-accent/20">PostHog A/B 测试</span>
+    <span class="px-3 py-1 text-sm rounded bg-accent/10 text-accent border border-accent/20">反滥用策略</span>
+    <span class="px-3 py-1 text-sm rounded bg-accent/10 text-accent border border-accent/20">分销系统</span>
   </div>
+  <p class="mt-8 text-lg text-muted">不是 AI 写不出来，是你不知道要写、不知道怎么设计。</p>
 </div>
 
-<!-- Slide 10: Billing logic -->
-<div class="slide left-align" data-slide="10">
-  <h3 style="color: var(--accent);">03</h3>
-  <h2>积分 + 订阅 + 支付的组合逻辑</h2>
-  <div style="margin-top: 24px; max-width: 800px;">
-    <p style="color: var(--text); font-size: 22px;">单独一个 Stripe 接入，AI 能写。</p>
-    <p style="margin-top: 16px;">但这些组合的设计——是业务决策：</p>
-    <ul style="margin-top: 16px;">
-      <li>积分充值 + 每日赠送 + 优惠码叠加</li>
-      <li>续费折扣 vs 一次性付费的比例调控</li>
-      <li>多支付网关（Stripe / Crypto / Telegram Stars）</li>
-    </ul>
-    <p style="margin-top: 24px; font-size: 18px; color: var(--text-muted);">框架把执行层接好，你只管调策略。</p>
-  </div>
-</div>
-
-<!-- Slide 11: Anti-abuse -->
-<div class="slide left-align" data-slide="11">
-  <h3 style="color: var(--accent);">04</h3>
-  <h2>反滥用 + 分销</h2>
-  <div class="two-col" style="margin-top: 32px;">
-    <div>
-      <p class="col-label green">反滥用</p>
-      <p>不是写一个 rate limiter。</p>
-      <p style="margin-top: 12px;">是：</p>
-      <ul>
-        <li>一次性邮箱放不放？</li>
-        <li>同 IP 多号怎么判？</li>
-        <li>风险分多少分拦？</li>
-      </ul>
+<!-- Slide 8: 脏活累活 -->
+<div class="slide" data-slide="8">
+  <h2 class="text-3xl font-medium tracking-tight">商业 SaaS 里的「脏活累活」</h2>
+  <div class="mt-8 grid grid-cols-2 gap-6 max-w-3xl">
+    <div class="p-5 rounded-lg bg-card border border-white/5">
+      <p class="text-accent text-sm font-medium">积分 + 订阅 + 支付</p>
+      <p class="mt-2 text-sm text-muted">充值、赠送、优惠码叠加、多网关<br>Stripe / Crypto / Telegram Stars</p>
     </div>
-    <div>
-      <p class="col-label green">分销系统</p>
-      <p>不是记录推荐关系。</p>
-      <p style="margin-top: 12px;">是：</p>
-      <ul>
-        <li>佣金比例给多少？</li>
-        <li>提现门槛怎么设？</li>
-        <li>刷量怎么识别？</li>
-      </ul>
+    <div class="p-5 rounded-lg bg-card border border-white/5">
+      <p class="text-accent text-sm font-medium">反滥用</p>
+      <p class="mt-2 text-sm text-muted">一次性邮箱检测、频率限制<br>风险评分、同 IP 多号判定</p>
+    </div>
+    <div class="p-5 rounded-lg bg-card border border-white/5">
+      <p class="text-accent text-sm font-medium">A/B 测试 (PostHog)</p>
+      <p class="mt-2 text-sm text-muted">从框架层保证<br>每个业务变更都能被测量</p>
+    </div>
+    <div class="p-5 rounded-lg bg-card border border-white/5">
+      <p class="text-accent text-sm font-medium">分销系统</p>
+      <p class="mt-2 text-sm text-muted">佣金追踪、提现管理<br>推荐链接、防刷</p>
     </div>
   </div>
-  <p style="margin-top: 32px; font-size: 18px; color: var(--text-muted);">管道搭好，你调规则。每个参数都是业务判断。</p>
+  <p class="mt-6 text-lg text-muted">这些都准备好了。你指挥 AI 写业务逻辑就行。</p>
 </div>
 
-<!-- Slide 12: Env-driven -->
-<div class="slide" data-slide="12">
-  <h2>环境变量驱动，不改代码</h2>
-  <div class="code-block" style="margin-top: 32px;">
-    <span class="comment"># 填了就开，不填就关</span><br>
-    <span class="key">STRIPE_SECRET_KEY</span>=<span class="val">sk_live_...</span><br>
-    <span class="key">POSTHOG_KEY</span>=<span class="val">phc_...</span><br>
-    <span class="key">NOWPAYMENTS_API_KEY</span>=<span class="val">...</span><br>
-    <span class="key">TELEGRAM_BOT_TOKEN</span>=<span class="val">...</span><br>
+<!-- Slide 9: 代码纹理 -->
+<div class="slide" data-slide="9">
+  <h2 class="text-3xl font-medium tracking-tight">底座预设好，AI 只写业务层</h2>
+  <div class="mt-8 p-6 rounded-lg bg-[#0d0d22] border border-white/5 font-mono text-sm leading-relaxed max-w-2xl">
+    <span class="text-muted/50"># 环境变量驱动，填了就开</span><br>
+    <span class="text-purple-300">STRIPE_SECRET_KEY</span>=<span class="text-green-400">sk_live_...</span><br>
+    <span class="text-purple-300">POSTHOG_KEY</span>=<span class="text-green-400">phc_...</span><br>
+    <span class="text-purple-300">NOWPAYMENTS_API_KEY</span>=<span class="text-green-400">...</span><br>
     <br>
-    <span class="comment"># 一套代码，三个进程</span><br>
-    <span class="key">pnpm dev</span>        <span class="comment"># Web</span><br>
-    <span class="key">pnpm api:dev</span>    <span class="comment"># API</span><br>
-    <span class="key">pnpm worker:dev</span> <span class="comment"># 后台任务</span><br>
+    <span class="text-muted/50"># 一套代码，三个进程</span><br>
+    <span class="text-white">pnpm dev</span>        <span class="text-muted/50"># Web</span><br>
+    <span class="text-white">pnpm api:dev</span>    <span class="text-muted/50"># API</span><br>
+    <span class="text-white">pnpm worker:dev</span> <span class="text-muted/50"># Worker</span>
   </div>
 </div>
 
-<!-- Slide 13: Cloud -->
+<!-- Slide 10: 部署问题 -->
+<div class="slide" data-slide="10">
+  <p class="text-2xl text-muted">开发完了。然后呢？</p>
+  <h2 class="text-4xl font-medium tracking-tight mt-4">K8s？Docker？Nginx？</h2>
+  <p class="mt-8 text-xl text-muted">又一个让一人公司耗尽精力的坑。</p>
+</div>
+
+<!-- Slide 11: Cloud -->
+<div class="slide" data-slide="11">
+  <p class="text-base font-mono text-accent">velobase.cloud</p>
+  <h2 class="text-4xl font-medium tracking-tight mt-4">Git Push → 上线</h2>
+  <div class="mt-8 flex flex-wrap gap-3">
+    <span class="px-3 py-1 text-sm rounded bg-accent/10 text-accent border border-accent/20">PostgreSQL</span>
+    <span class="px-3 py-1 text-sm rounded bg-accent/10 text-accent border border-accent/20">Redis</span>
+    <span class="px-3 py-1 text-sm rounded bg-accent/10 text-accent border border-accent/20">对象存储</span>
+    <span class="px-3 py-1 text-sm rounded bg-accent/10 text-accent border border-accent/20">自动 SSL</span>
+    <span class="px-3 py-1 text-sm rounded bg-accent/10 text-accent border border-accent/20">自定义域名</span>
+  </div>
+  <p class="mt-6 text-lg text-muted">原生理解 Harness 三进程结构。零配置。让机器管机器。</p>
+</div>
+
+<!-- Slide 12: 真实验证 -->
+<div class="slide" data-slide="12">
+  <h2 class="text-4xl font-medium tracking-tight">从真实项目中抽离</h2>
+  <p class="mt-4 text-xl text-muted">这不是玩具。</p>
+  <p class="mt-8 text-2xl text-white/90">一个人，用这套东西，赚了几万美金。</p>
+  <p class="mt-4 text-lg text-muted">今天开源出来，让你的 AI 有个更高的起点。</p>
+</div>
+
+<!-- Slide 13: 结尾 -->
 <div class="slide" data-slide="13">
-  <h2>velobase.cloud</h2>
-  <p class="subtitle" style="margin-top: 8px;">最后一步也不用管</p>
-  <div style="margin-top: 40px; text-align: center;">
-    <div class="flow-row" style="justify-content: center; font-size: 24px;">
-      <span class="highlight">git push</span>
-      <span class="arrow">→</span>
-      <span>自动构建</span>
-      <span class="arrow">→</span>
-      <span class="result">上线</span>
-    </div>
-    <div style="margin-top: 40px; display: flex; gap: 24px; justify-content: center; flex-wrap: wrap;">
-      <span class="tag purple">PostgreSQL 托管</span>
-      <span class="tag purple">Redis 托管</span>
-      <span class="tag purple">对象存储</span>
-      <span class="tag purple">自动 SSL</span>
-      <span class="tag purple">自定义域名</span>
-    </div>
-    <p style="margin-top: 32px; font-size: 20px; color: var(--text);">平台理解框架结构。不是通用 PaaS。零配置联动。</p>
-    <p style="font-size: 18px;">不需要会 K8s，不需要凌晨三点收报警。</p>
+  <h2 class="text-3xl font-medium tracking-tight">提高我们的认知，让 AI 专心做牛马。</h2>
+  <div class="mt-10 flex gap-8">
+    <a href="https://github.com/velobase/velobase-harness" target="_blank" class="text-accent text-lg border-b border-accent/30 pb-0.5 hover:border-accent transition-colors">GitHub</a>
+    <a href="https://velobase.cloud" target="_blank" class="text-accent text-lg border-b border-accent/30 pb-0.5 hover:border-accent transition-colors">velobase.cloud</a>
   </div>
+  <p class="mt-12 text-base text-muted/40">Jerry · Velobase</p>
 </div>
 
-<!-- Slide 14: Summary -->
-<div class="slide" data-slide="14">
-  <div class="quote">
-    「人类啥都不会，但是是 AI 使用的主体。<br>
-    提高人类的认知水平，不要让人类限制了 AI，<br>
-    让 AI 专注于 AI 擅长的事情。」
-  </div>
-  <p style="margin-top: 24px; font-size: 16px; color: var(--text-muted);">—— 学成</p>
 </div>
 
-<!-- Slide 15: Closing -->
-<div class="slide" data-slide="15">
-  <h2 style="text-align: center;">一人公司的核心竞争力</h2>
-  <p style="margin-top: 32px; font-size: 28px; text-align: center; color: var(--text); font-weight: 300;">
-    <span class="accent-text">认知密度</span> × <span class="green-text">迭代速度</span>
-  </p>
-  <p style="margin-top: 40px; font-size: 22px; text-align: center; max-width: 700px;">
-    Harness 不是帮你少写代码。<br>
-    是帮你把每一次思考都变成可测量的实验。
-  </p>
+<!-- Progress -->
+<div class="fixed bottom-8 right-10 text-sm font-mono text-muted/40 z-50">
+  <span id="current">1</span> / <span id="total">13</span>
 </div>
-
-<!-- Slide 16: Final -->
-<div class="slide" data-slide="16">
-  <h1 style="font-size: 40px;">不要让你的精力<br>配不上你的认知</h1>
-  <div class="final-links">
-    <a href="https://velobase.cloud">velobase.cloud</a>
-    <a href="https://github.com/velobase">github.com/velobase</a>
-  </div>
-  <p style="margin-top: 48px; font-size: 16px; color: rgba(255,255,255,0.3);">Jerry · Velobase</p>
-</div>
-
-</div><!-- .deck -->
-
-<div class="progress"><span id="current">1</span> / <span id="total">16</span></div>
-<div class="nav-hint">← → 翻页</div>
+<div class="fixed bottom-8 left-10 text-xs text-white/15 z-50">← → 翻页</div>
 
 <script>
 const slides = document.querySelectorAll('.slide');
 const total = slides.length;
-let current = parseInt(localStorage.getItem('opc-slide') || '1');
+let current = parseInt(localStorage.getItem('opc-slide-v2') || '1');
 
 document.getElementById('total').textContent = total;
 
@@ -427,7 +205,7 @@ function show(n) {
   slides.forEach(s => s.classList.remove('active'));
   slides[current - 1].classList.add('active');
   document.getElementById('current').textContent = current;
-  localStorage.setItem('opc-slide', current);
+  localStorage.setItem('opc-slide-v2', current);
 }
 
 show(current);
@@ -439,7 +217,6 @@ document.addEventListener('keydown', e => {
   if (e.key === 'End') { e.preventDefault(); show(total); }
 });
 
-// Touch/click nav
 let touchStartX = 0;
 document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
 document.addEventListener('touchend', e => {
