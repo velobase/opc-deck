@@ -174,8 +174,40 @@ html, body { height: 100%; overflow: hidden; background: #0a0a1a; }
   <div class="notes">第五个：先发后收。反滥用是必须做的，但怎么做很讲究。最直觉的做法是在注册时同步做所有检查：查 IP、查设备指纹、查邮箱是否关联其他账号。但这些检查加起来要 2-3 秒。99% 的正常用户会因为 1% 的坏人，体验到一个很慢的注册流程。Harness 的策略是「先发后收」：注册时只做最轻量的检测——查一下是不是一次性邮箱，如果不是就立即放行，发放新用户积分。然后异步在后台做重量级检测：同 IP 多账号、设备指纹关联、行为模式分析。如果确认是滥用，再自动把已经发给他的积分回收。这样正常用户体验零延迟，坏人最终也拿不到好处。</div>
 </div>
 
-<!-- Slide 8: R — Result -->
+<!-- Slide 8: velobase.io -->
 <div class="slide" data-slide="8">
+  <p class="text-sm font-mono text-accent uppercase tracking-wider">velobase.io</p>
+  <h2 class="text-4xl font-medium tracking-tight mt-4">计费即服务</h2>
+  <p class="mt-6 text-xl text-muted max-w-2xl leading-relaxed">
+    不想自己维护支付状态机、订单补偿、对账逻辑？<br>
+    直接接入 velobase.io，把「收钱」这件事交给我们。
+  </p>
+  <div class="mt-8 flex flex-wrap gap-3">
+    <span class="px-4 py-2 text-sm rounded bg-accent/10 text-accent border border-accent/20">积分 + 订阅</span>
+    <span class="px-4 py-2 text-sm rounded bg-accent/10 text-accent border border-accent/20">多网关</span>
+    <span class="px-4 py-2 text-sm rounded bg-accent/10 text-accent border border-accent/20">自动对账</span>
+    <span class="px-4 py-2 text-sm rounded bg-accent/10 text-accent border border-accent/20">Webhook 补偿</span>
+  </div>
+  <div class="notes">刚才讲的支付掉单、对账这些问题，如果你不想自己维护这套逻辑，可以直接用 velobase.io。它是我们基于 Harness 支付模块抽出来的独立服务——计费即服务。积分、订阅、多网关、自动对账、Webhook 补偿全包了。你只需要调 API，不需要自己跑补偿任务。</div>
+</div>
+
+<!-- Slide 9: velobase.cloud -->
+<div class="slide" data-slide="9">
+  <p class="text-sm font-mono text-accent uppercase tracking-wider">velobase.cloud</p>
+  <h2 class="text-4xl font-medium tracking-tight mt-4">Git Push → 上线</h2>
+  <div class="mt-8 flex flex-wrap gap-3">
+    <span class="px-4 py-2 text-sm rounded bg-accent/10 text-accent border border-accent/20">PostgreSQL</span>
+    <span class="px-4 py-2 text-sm rounded bg-accent/10 text-accent border border-accent/20">Redis</span>
+    <span class="px-4 py-2 text-sm rounded bg-accent/10 text-accent border border-accent/20">对象存储</span>
+    <span class="px-4 py-2 text-sm rounded bg-accent/10 text-accent border border-accent/20">自动 SSL</span>
+    <span class="px-4 py-2 text-sm rounded bg-accent/10 text-accent border border-accent/20">自定义域名</span>
+  </div>
+  <p class="mt-6 text-lg text-muted">为 Harness 优化的云部署。让「运维」不再成为绊脚石。</p>
+  <div class="notes">有了框架和计费，最后是部署。velobase.cloud 是为 Harness 生态优化的云平台。Git push 就上线，数据库、Redis、对象存储、SSL 证书全帮你搞好。你不用花时间在 DevOps 上。</div>
+</div>
+
+<!-- Slide 10: R — Result -->
+<div class="slide" data-slide="10">
   <p class="text-sm font-mono text-accent uppercase tracking-wider">Result</p>
   <h2 class="text-4xl font-medium tracking-tight mt-4">单人操盘，数万美金。</h2>
   <div class="mt-8 max-w-2xl space-y-4">
@@ -186,8 +218,8 @@ html, body { height: 100%; overflow: hidden; background: #0a0a1a; }
   <div class="notes">结果是什么？我们自己用这套框架，做到了单人并行操盘多个 AI SaaS 产品——从开发到投放到收钱到反滥用，一个人搞定。目前已经产生了数万美金的真实收入。这不是因为我们团队特别强，而是因为框架把商业化过程中那些琐碎但关键的模块都预置好了。开发者只需要专注于打磨 AI 核心功能和理解用户需求。</div>
 </div>
 
-<!-- Slide 9: 结尾 -->
-<div class="slide" data-slide="9">
+<!-- Slide 11: 结尾 -->
+<div class="slide" data-slide="11">
   <h2 class="text-4xl font-medium tracking-tight leading-snug">100% 开源。<br><span class="text-muted">拿去用。</span></h2>
   <div class="mt-10 flex flex-col gap-6 max-w-xl">
     <div class="flex items-center gap-3">
@@ -195,10 +227,18 @@ html, body { height: 100%; overflow: hidden; background: #0a0a1a; }
       <span class="font-mono text-xl text-accent">github.com/velobase/velobase-harness</span>
     </div>
     <div class="flex items-center gap-3">
+      <span class="text-muted w-16 text-sm">计费</span>
+      <span class="font-mono text-xl text-accent">velobase.io</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="text-muted w-16 text-sm">云端</span>
+      <span class="font-mono text-xl text-accent">velobase.cloud</span>
+    </div>
+    <div class="flex items-center gap-3">
       <span class="text-muted w-16 text-sm">社区</span>
       <span class="font-mono text-xl text-accent">discord.gg/eAK6Sfw5c6</span>
     </div>
-    <div class="text-muted text-base mt-2">Next.js 15 · tRPC · Prisma · BullMQ · Tailwind<br>填环境变量启用，不改代码。</div>
+    <div class="text-muted text-base mt-2">填环境变量启用，不改代码。</div>
   </div>
   <p class="mt-10 text-base text-muted/40">Jerry · Velobase</p>
   <div class="notes">Velobase Harness 完全开源。刚才讲的所有模块都在里面，代码和文档都有。你如果也在做 AI SaaS，可以直接克隆下来用，省掉这些踩坑的时间。谢谢大家。</div>
@@ -216,7 +256,7 @@ html, body { height: 100%; overflow: hidden; background: #0a0a1a; }
 <script>
 const slides = document.querySelectorAll('.slide');
 const total = slides.length;
-let current = parseInt(localStorage.getItem('opc-slide-v6') || '1');
+let current = parseInt(localStorage.getItem('opc-slide-v7') || '1');
 document.getElementById('total').textContent = total;
 
 function show(n) {
@@ -226,7 +266,7 @@ function show(n) {
   slides.forEach(s => s.classList.remove('active'));
   slides[current - 1].classList.add('active');
   document.getElementById('current').textContent = current;
-  localStorage.setItem('opc-slide-v6', current);
+  localStorage.setItem('opc-slide-v7', current);
 }
 show(current);
 
