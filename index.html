@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>不要让人类限制了 AI — Velobase</title>
+<title>Velobase Harness — OPC Talk</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
 <script>
@@ -20,6 +20,7 @@ tailwind.config = {
         accent: '#533afd',
         muted: '#8888aa',
         green: '#15be53',
+        red: '#ef4444',
       }
     }
   }
@@ -61,191 +62,151 @@ html, body { height: 100%; overflow: hidden; background: #0a0a1a; }
 
 <div class="relative w-screen h-screen z-10">
 
-<!-- Slide 1: 封面 -->
+<!-- Slide 1: S — Situation -->
 <div class="slide active" data-slide="1">
-  <h1 class="text-5xl font-medium tracking-tight leading-tight">AI 时代的独立产品：<br>为什么代码自由了，财务还没自由？</h1>
-  <p class="mt-6 text-xl text-muted">Velobase 的踩坑与实践</p>
-  <p class="mt-12 text-base text-muted/50">Jerry · Velobase</p>
-  <div class="notes">大家好，我是 Jerry，Velobase 创始人。今天15分钟，跟大家聊聊天。过去一年大家都感受到了：AI 写代码越来越强。按理说开发门槛降这么低，独立开发者应该批量赚钱了。但现实是大部分人并没有。今天想分享一下我们团队是怎么看待这个问题，以及怎么去解决它的。</div>
+  <p class="text-sm font-mono text-accent uppercase tracking-wider">Situation</p>
+  <h1 class="text-4xl font-medium tracking-tight leading-tight mt-4">AI SaaS 光有 AI 功能，卖不了钱。</h1>
+  <p class="mt-6 text-xl text-muted max-w-2xl leading-relaxed">能卖钱的产品需要一组具体的商业模块：<br>支付对账、反滥用、广告归因、用户生命周期管理……</p>
+  <p class="mt-6 text-lg text-white/70">这些模块的难点不是「怎么写」，而是「不知道要写」。</p>
+  <div class="notes">大家好，我是 Jerry，Velobase 创始人。今天跟大家分享一些具体的东西。做 AI SaaS 的人很多，但大部分产品不赚钱。原因不是 AI 功能做得不好，而是产品缺少一系列商业化模块。这些模块的问题不在于技术难度——有 AI 帮忙都能写——而在于开发者根本不知道需要做这些东西。接下来我会讲 5 个具体的知识点，都是我们踩坑学到的。</div>
 </div>
 
-<!-- Slide 2: 反直觉现象 -->
+<!-- Slide 2: T — Task -->
 <div class="slide" data-slide="2">
-  <h2 class="text-4xl font-medium tracking-tight leading-snug">不是 AI 写代码不行，<br><span class="text-muted">是不知道让 AI 写什么。</span></h2>
-  <div class="mt-8 max-w-2xl">
-    <p class="text-xl text-muted">过去：卡在「怎么实现」</p>
-    <p class="text-xl text-muted mt-2">现在：卡在「该实现什么」</p>
-    <p class="text-xl text-white/90 mt-4">从代码问题，变成了认知问题。</p>
-  </div>
-  <div class="notes">很多人抱怨产品不赚钱，原因往往归结为流量贵或者 AI 还不够聪明。但我们发现核心原因根本不是 AI 写代码不行，而是我们人类不知道该让 AI 去写什么。以前做产品卡在技术上，不知道"怎么写"；现在有了 AI，技术不是瓶颈了，我们却卡在了"该做哪些事才能让产品变成真正的商业软件"。这是认知问题。</div>
+  <p class="text-sm font-mono text-accent uppercase tracking-wider">Task</p>
+  <h2 class="text-4xl font-medium tracking-tight mt-4">Velobase Harness</h2>
+  <p class="mt-6 text-xl text-muted max-w-2xl leading-relaxed">
+    一个开源框架，把这些「你不知道要做」的模块预置好。<br>
+    填环境变量启用，不改代码。
+  </p>
+  <div class="mt-8 font-mono text-sm text-accent/70">github.com/velobase/velobase-harness</div>
+  <div class="notes">为了解决这个问题，我们做了 Velobase Harness，一个开源的全栈 AI SaaS 框架。它的核心设计很简单：把我们踩过的坑全部内置为可插拔模块，你填一个环境变量就自动启用，不需要改代码。接下来我不讲框架架构，直接讲 5 个具体问题，讲清楚它们是什么、为什么你可能不知道、我们怎么处理的。</div>
 </div>
 
-<!-- Slide 3: 功能 vs 生意 -->
+<!-- Slide 3: A1 — 支付掉单 -->
 <div class="slide" data-slide="3">
-  <h2 class="text-4xl font-medium tracking-tight">从「玩具」到「商品」<br><span class="text-muted">中间差了什么？</span></h2>
-  <div class="mt-8 grid grid-cols-2 gap-8 max-w-2xl">
-    <div>
-      <p class="text-sm text-muted/60 uppercase tracking-wider">开发者擅长的</p>
-      <p class="mt-2 text-lg text-muted">核心功能、UI 界面</p>
+  <p class="text-sm font-mono text-accent uppercase tracking-wider">Action 1 · 支付掉单</p>
+  <h2 class="text-3xl font-medium tracking-tight mt-4">Stripe Webhook 会丢。<br><span class="text-muted">用户付了钱，你不知道。</span></h2>
+  <div class="mt-8 max-w-2xl space-y-4">
+    <div class="flex items-start gap-3">
+      <span class="text-red font-mono text-sm mt-1">问题</span>
+      <p class="text-lg text-muted">网络抖动、服务重启、部署间隙——Webhook 没收到。<br>订单卡在 PENDING，用户付了钱没权益。</p>
     </div>
-    <div>
-      <p class="text-sm text-accent/80 uppercase tracking-wider">商业化必备的</p>
-      <p class="mt-2 text-lg text-white/80">计费、防滥用、A/B 测试<br>分销裂变、广告追踪……</p>
+    <div class="flex items-start gap-3">
+      <span class="text-green font-mono text-sm mt-1">处理</span>
+      <p class="text-lg text-white/80">每分钟扫描 PENDING 订单，主动向 Stripe 查询真实状态。<br>每小时全量对账，确保没有一笔遗漏。</p>
     </div>
   </div>
-  <p class="mt-8 text-lg text-muted">AI 再强，也不能在你完全不知道的领域无中生有。</p>
-  <div class="notes">我们程序员最擅长做核心功能和好看的界面。但你真要把东西卖出去，你需要懂很多开发以外的东西。比如接支付、防滥用、做 A/B 测试、搞分销、做投放追踪。如果你脑子里压根没有"广告回传"这个概念，你怎么可能让 AI 帮你生成对应代码呢？AI 再强也不能在你完全不知道的领域无中生有。</div>
+  <div class="notes">第一个知识点：支付掉单。你接了 Stripe，用户付款成功后，Stripe 会通过 Webhook 通知你。但 Webhook 本质上是一个 HTTP 请求，网络会抖动、你的服务可能刚好在重启、部署间隙可能有几秒收不到请求。这时候用户实际已经付了钱，但你的系统不知道。用户会来找你。你如果没有自动补偿机制，就得手动处理。Harness 的做法是：后台每分钟扫描一次所有超过 5 分钟仍然是 PENDING 的订单，主动去 Stripe API 查一下真实状态。如果已经 succeeded，就自动完成权益发放。每小时还有一次全量对账。这样不论 Webhook 丢不丢，你都不会漏单。</div>
 </div>
 
-<!-- Slide 4: Harness 诞生 -->
+<!-- Slide 4: A2 — Gmail 别名滥用 -->
 <div class="slide" data-slide="4">
-  <p class="text-base font-mono text-accent">开源 · velobase/velobase-harness</p>
-  <h2 class="text-4xl font-medium tracking-tight mt-4">让「认知」和「经验」变得可学习</h2>
-  <p class="mt-6 text-xl text-muted max-w-2xl leading-relaxed">
-    不只是代码模板，更是一份实战说明书。<br>
-    把商业化需要的坑位提前挖好。
-  </p>
-  <div class="notes">为了解决认知盲区，我们做了第一款核心产品：Velobase Harness。完全开源的商业化 SaaS 框架。它跟市面上的框架不太一样。我们把团队做商业产品的经验全都沉淀在里面，它不仅是一套代码，更是一份实战说明书。我们把那些你必须要懂、但可能现在还没考虑到的商业化环节，提前在框架里留好了"坑位"。</div>
+  <p class="text-sm font-mono text-accent uppercase tracking-wider">Action 2 · Gmail 别名滥用</p>
+  <h2 class="text-3xl font-medium tracking-tight mt-4">同一个人，无限个邮箱。</h2>
+  <div class="mt-8 max-w-2xl">
+    <div class="p-5 rounded-lg bg-card border border-white/5 font-mono text-base space-y-2">
+      <p><span class="text-muted">john.doe</span>@gmail.com</p>
+      <p><span class="text-muted">johndoe</span>@gmail.com</p>
+      <p><span class="text-muted">j.o.h.n.d.o.e</span>@gmail.com</p>
+      <p><span class="text-muted">johndoe+free1</span>@gmail.com</p>
+      <p class="text-accent">↑ 全是同一个人。Gmail 忽略点和加号后缀。</p>
+    </div>
+    <div class="mt-6 flex items-start gap-3">
+      <span class="text-green font-mono text-sm mt-1">处理</span>
+      <p class="text-lg text-white/80">注册时自动规整化：去掉点、去掉 + 后缀、统一比对。<br>同一个真实邮箱只能注册一次。</p>
+    </div>
+  </div>
+  <div class="notes">第二个：Gmail 别名滥用。Gmail 有两个特性大部分开发者不知道：第一，邮箱用户名里的点会被忽略，john.doe 和 johndoe 是同一个邮箱；第二，加号后面的内容也被忽略，johndoe+anything 和 johndoe 是同一个邮箱。这意味着一个人可以用 johndoe、j.ohndoe、johndoe+1、johndoe+2…… 注册无数个账号。如果你的产品有新用户赠送（比如赠 100 积分），一个人可以轻松刷走上万积分。Harness 在注册环节自动做邮箱规整化：去掉所有点、去掉加号后缀，用规整后的邮箱做唯一性校验。同一个真实邮箱只能注册一次。</div>
 </div>
 
-<!-- Slide 5: 广告归因举例 -->
+<!-- Slide 5: A3 — 广告归因回传 -->
 <div class="slide" data-slide="5">
-  <h2 class="text-3xl font-medium tracking-tight">举个例子：你完全不懂投放时</h2>
-  <div class="mt-6 max-w-2xl">
-    <p class="text-xl text-muted">研发不知道什么是「广告回传」。</p>
-    <p class="mt-3 text-xl text-muted">不知道 <span class="font-mono text-accent/80">campaign_id</span>、<span class="font-mono text-accent/80">utm_source</span>、<span class="font-mono text-accent/80">fbclid</span> 是干嘛的。</p>
-    <p class="mt-6 text-xl text-white/90 border-l-4 border-accent pl-4">没关系。框架里已经留好了追踪结构。<br>顺着框架跟 AI 聊着天，就能填上。</p>
+  <p class="text-sm font-mono text-accent uppercase tracking-wider">Action 3 · 广告归因</p>
+  <h2 class="text-3xl font-medium tracking-tight mt-4">前端追踪被 AdBlock 吃掉。<br><span class="text-muted">你的广告数据全是假的。</span></h2>
+  <div class="mt-8 max-w-2xl space-y-4">
+    <div class="flex items-start gap-3">
+      <span class="text-red font-mono text-sm mt-1">问题</span>
+      <p class="text-lg text-muted">30%+ 用户装了广告拦截。前端 gtag 转化事件根本发不出去。<br>你看到的 ROAS 数据严重失真。</p>
+    </div>
+    <div class="flex items-start gap-3">
+      <span class="text-green font-mono text-sm mt-1">处理</span>
+      <p class="text-lg text-white/80">三层链路：<br>
+        ① 落地页自动采集 <span class="font-mono text-accent/80">gclid / utm_source / fbclid</span> → Cookie<br>
+        ② 注册时写入 User 表，绑定用户身份<br>
+        ③ 付费成功后，<span class="text-accent">服务端</span>离线回传 Google Ads API</p>
+    </div>
   </div>
-  <div class="notes">给大家举个很直观的例子。很多研发不懂广告投放，让你去接广告平台的转化回传，你可能连什么是 campaign_id 都不清楚。但没关系。在 Harness 框架里我们已经把追踪和转化的代码骨架预留好了，文档也会告诉你这是用来干嘛的。你不需要恶补几个月营销课，只要把这部分框架拿给 AI 看，顺着留的口子跟 AI 聊着天，AI 就能帮你把这些认知之外的代码填补完整。框架引导认知，AI 补齐执行。</div>
+  <div class="notes">第三个：广告归因。你花了钱投 Google Ads，想知道哪个关键词带来了付费用户。常规做法是前端装 gtag 追踪代码。但现实是，30% 以上的用户装了 AdBlock 或类似插件，这些插件会直接屏蔽 gtag 请求。也就是说你的转化数据有三分之一是丢失的。你算出来的 ROAS（广告回报率）是假的，你可能在亏钱的渠道上加预算。Harness 的做法是三层链路。第一层：用户从广告点进来的时候，URL 里有 gclid 这个参数，框架自动采集存到 Cookie。第二层：用户注册时，把 Cookie 里的 gclid 写入数据库 User 表，跟用户身份绑定。第三层：当这个用户某天付费了，后台通过 BullMQ 队列，每 5 分钟批量将转化事件通过 Google Ads API 从服务端上传。服务端回传不经过浏览器，AdBlock 拦不住。这样你的归因数据是准的。</p></div>
 </div>
 
-<!-- Slide 6: AI搞不定的 -->
+<!-- Slide 6: A4 — 签到衰减 -->
 <div class="slide" data-slide="6">
-  <h2 class="text-3xl font-medium tracking-tight">AI 无法一句话搞定的事，我们准备好了</h2>
-  <div class="mt-8 grid grid-cols-2 gap-6 max-w-3xl">
-    <div class="p-5 rounded-lg bg-card border border-white/5">
-      <p class="text-accent text-sm font-medium">复杂计费</p>
-      <p class="mt-2 text-sm text-muted">积分+订阅+优惠码+多网关<br>算错账就是资产损失</p>
+  <p class="text-sm font-mono text-accent uppercase tracking-wider">Action 4 · 签到衰减</p>
+  <h2 class="text-3xl font-medium tracking-tight mt-4">新用户赠送如果不衰减，<br><span class="text-muted">获客成本永远不收敛。</span></h2>
+  <div class="mt-8 max-w-2xl space-y-4">
+    <div class="flex items-start gap-3">
+      <span class="text-red font-mono text-sm mt-1">问题</span>
+      <p class="text-lg text-muted">每天赠 10 积分，用户永远不需要付费。<br>第 100 天注册的用户和第 1 天享受一样的待遇，成本线性增长。</p>
     </div>
-    <div class="p-5 rounded-lg bg-card border border-white/5">
-      <p class="text-accent text-sm font-medium">反滥用</p>
-      <p class="mt-2 text-sm text-muted">一次性邮箱、频率限制<br>风险评分、精细化登录</p>
-    </div>
-    <div class="p-5 rounded-lg bg-card border border-white/5">
-      <p class="text-accent text-sm font-medium">数据与增长</p>
-      <p class="mt-2 text-sm text-muted">PostHog A/B 测试<br>广告归因回传</p>
-    </div>
-    <div class="p-5 rounded-lg bg-card border border-white/5">
-      <p class="text-accent text-sm font-medium">分销系统</p>
-      <p class="mt-2 text-sm text-muted">佣金追踪、提现<br>防刷、裂变引擎</p>
+    <div class="flex items-start gap-3">
+      <span class="text-green font-mono text-sm mt-1">处理</span>
+      <p class="text-lg text-white/80">连续签到衰减：第 1 天赠 10，第 2 天赠 9，第 3 天赠 8……<br>最终收敛到一个最低值。促进留存的同时控制成本。</p>
     </div>
   </div>
-  <p class="mt-6 text-lg text-muted">对准确度要求极高的底层商业模块，别让 AI 重新造轮子。</p>
-  <div class="notes">当然除了认知引导，还有一些东西目前 AI 很难一次性写完美。比如复杂的按量计费——处理不善就是资产损失；比如精细的防滥用机制。对于这种 AI 容易出 bug、准确度要求又极高的底层模块，我们的态度是：别重新造轮子，我们帮你打磨好了。</div>
+  <div class="notes">第四个：签到衰减。很多 AI 产品为了拉新会给新用户每日赠送积分。看起来很合理，但如果每天赠送的量是固定的，那用户永远用免费额度就够了，他没有动力付费。而且你的用户越来越多，每天发出去的积分也越来越多，这是一条线性增长的成本线，永远不收敛。Harness 的做法是签到衰减：第 1 天赠 10 积分，第 2 天赠 9，第 3 天赠 8，逐渐衰减到一个最低值（比如 2）。这样做的效果是：新用户前几天能充分体验产品（促激活），但几天后免费额度不够用了，自然产生付费动力。同时总赠送量是有上界的，成本可控。</div>
 </div>
 
-<!-- Slide 7: velobase.io -->
+<!-- Slide 7: A5 — 先发后收 -->
 <div class="slide" data-slide="7">
-  <p class="text-base font-mono text-accent">velobase.io</p>
-  <h2 class="text-4xl font-medium tracking-tight mt-4">计费即服务</h2>
-  <p class="mt-6 text-xl text-muted max-w-2xl leading-relaxed">
-    开箱即用的计费引擎。<br>
-    完美适配 Harness 框架。<br>
-    <span class="text-white/80">把「收钱」这件最容易出错的事交给我们。</span>
-  </p>
-  <div class="notes">除了开源的 Harness 框架，我们还提供了商业化服务 velobase.io。简单理解就是 Billing as a Service。你拿 Harness 搭好产品，需要收费的时候直接接入 velobase.io。最容易算错账、最容易出问题的计费模块我们独立出来了，就是为了让大家安心，把精力放在产品和推广上。</div>
+  <p class="text-sm font-mono text-accent uppercase tracking-wider">Action 5 · 先发后收</p>
+  <h2 class="text-3xl font-medium tracking-tight mt-4">反滥用不能让正常用户等。</h2>
+  <div class="mt-8 max-w-2xl space-y-4">
+    <div class="flex items-start gap-3">
+      <span class="text-red font-mono text-sm mt-1">问题</span>
+      <p class="text-lg text-muted">如果注册时同步做所有检测（IP 查询、设备指纹、邮箱校验），<br>正常用户也要等 2-3 秒。99% 的人被 1% 的坏人拖慢。</p>
+    </div>
+    <div class="flex items-start gap-3">
+      <span class="text-green font-mono text-sm mt-1">处理</span>
+      <p class="text-lg text-white/80">注册时只做轻量检测（临时邮箱黑名单），立即放行。<br>异步检测同 IP 多账号、设备指纹关联。<br>确认滥用后，自动回收已发放的积分。</p>
+    </div>
+  </div>
+  <div class="notes">第五个：先发后收。反滥用是必须做的，但怎么做很讲究。最直觉的做法是在注册时同步做所有检查：查 IP、查设备指纹、查邮箱是否关联其他账号。但这些检查加起来要 2-3 秒。99% 的正常用户会因为 1% 的坏人，体验到一个很慢的注册流程。Harness 的策略是「先发后收」：注册时只做最轻量的检测——查一下是不是一次性邮箱，如果不是就立即放行，发放新用户积分。然后异步在后台做重量级检测：同 IP 多账号、设备指纹关联、行为模式分析。如果确认是滥用，再自动把已经发给他的积分回收。这样正常用户体验零延迟，坏人最终也拿不到好处。</div>
 </div>
 
-<!-- Slide 8: Cloud -->
+<!-- Slide 8: R — Result -->
 <div class="slide" data-slide="8">
-  <p class="text-base font-mono text-accent">velobase.cloud</p>
-  <h2 class="text-4xl font-medium tracking-tight mt-4">Git Push → 上线</h2>
-  <div class="mt-8 flex flex-wrap gap-3">
-    <span class="px-4 py-2 text-sm rounded bg-accent/10 text-accent border border-accent/20">PostgreSQL</span>
-    <span class="px-4 py-2 text-sm rounded bg-accent/10 text-accent border border-accent/20">Redis</span>
-    <span class="px-4 py-2 text-sm rounded bg-accent/10 text-accent border border-accent/20">对象存储</span>
-    <span class="px-4 py-2 text-sm rounded bg-accent/10 text-accent border border-accent/20">自动 SSL</span>
-    <span class="px-4 py-2 text-sm rounded bg-accent/10 text-accent border border-accent/20">自定义域名</span>
+  <p class="text-sm font-mono text-accent uppercase tracking-wider">Result</p>
+  <h2 class="text-4xl font-medium tracking-tight mt-4">单人操盘，数万美金。</h2>
+  <div class="mt-8 max-w-2xl space-y-4">
+    <p class="text-xl text-muted">我们团队用这套框架，单人并行操盘多个 AI SaaS 产品。</p>
+    <p class="text-xl text-white/80">已产生数万美金真实收入。</p>
+    <p class="text-lg text-muted mt-6">不是因为我们特别厉害，<br>而是框架把商业化的脏活累活都做完了，<br>人只需要专注产品本身。</p>
   </div>
-  <p class="mt-6 text-lg text-muted">为 Harness 优化的云部署。让「运维」不再成为绊脚石。</p>
-  <div class="notes">有了框架、有了计费，最后是上线。搞服务器配置、折腾数据库也是很消耗热情的事。所以我们做了 Velobase Cloud，跟我们的生态高度绑定。顺着 Harness 写完的产品，在我们 Cloud 上可以一键部署。到这里，从开发到收费再到上线的基建，全搭好了。</div>
+  <div class="notes">结果是什么？我们自己用这套框架，做到了单人并行操盘多个 AI SaaS 产品——从开发到投放到收钱到反滥用，一个人搞定。目前已经产生了数万美金的真实收入。这不是因为我们团队特别强，而是因为框架把商业化过程中那些琐碎但关键的模块都预置好了。开发者只需要专注于打磨 AI 核心功能和理解用户需求。</div>
 </div>
 
-<!-- Slide 9: 组织架构 -->
+<!-- Slide 9: 结尾 -->
 <div class="slide" data-slide="9">
-  <h2 class="text-4xl font-medium tracking-tight">一个「奇怪」的创业公司</h2>
-  <div class="mt-8 grid grid-cols-2 gap-8 max-w-2xl">
-    <div>
-      <p class="text-sm text-accent/80 uppercase tracking-wider">渠道运营</p>
-      <p class="mt-2 text-lg text-muted">品牌宣发、渠道积累</p>
-    </div>
-    <div>
-      <p class="text-sm text-accent/80 uppercase tracking-wider">产研</p>
-      <p class="mt-2 text-lg text-white/80">一人一产品。</p>
-    </div>
-  </div>
-  <p class="mt-8 text-xl text-muted">不是一个人的公司，但每个产品只有一个人。</p>
-  <div class="notes">刚才讲了这些工具，大家可能好奇：真的行得通吗？分享一下我们自己的组织架构。Velobase 是一个创业团队，不是单打独斗。但架构挺特别：公司分两拨人——渠道运营负责品牌和宣发，产研负责建产品。我们产研执行的是绝对的"一人一产品"制度。</div>
-</div>
-
-<!-- Slide 10: 一人一产品 -->
-<div class="slide" data-slide="10">
-  <h2 class="text-4xl font-medium tracking-tight">一个人 = 一整个商业闭环</h2>
-  <div class="mt-8 flex flex-wrap gap-2 max-w-3xl">
-    <span class="px-3 py-1.5 text-sm rounded bg-accent/10 text-accent border border-accent/20">写代码</span>
-    <span class="px-3 py-1.5 text-sm rounded bg-accent/10 text-accent border border-accent/20">社交媒体</span>
-    <span class="px-3 py-1.5 text-sm rounded bg-accent/10 text-accent border border-accent/20">渠道投放</span>
-    <span class="px-3 py-1.5 text-sm rounded bg-accent/10 text-accent border border-accent/20">Email 营销</span>
-    <span class="px-3 py-1.5 text-sm rounded bg-accent/10 text-accent border border-accent/20">私域群</span>
-    <span class="px-3 py-1.5 text-sm rounded bg-accent/10 text-accent border border-accent/20">数据分析</span>
-  </div>
-  <p class="mt-8 text-xl text-white/80">人提供认知覆盖面，AI 提供执行力。</p>
-  <p class="mt-2 text-xl text-muted">成为指挥官，不是打字员。</p>
-  <div class="notes">什么叫一人一产品？在我们这里不只是写代码。从调研、写代码到社交媒体运营、发 email、管理私域群、做广告投放、看数据分析——全是一个人搞定。听起来反人类对吧？但我们真实跑通了。核心就是：只要你的认知覆盖面足够广，只要你知道商业闭环包含哪些环节，你就不需要亲力亲为每一件事。AI 是你最好的执行团队。人的作用是决策和认知方向。</div>
-</div>
-
-<!-- Slide 11: 验证 -->
-<div class="slide" data-slide="11">
-  <h2 class="text-4xl font-medium tracking-tight">用自己的狗粮，喂出真实结果</h2>
-  <p class="mt-6 text-xl text-muted max-w-2xl leading-relaxed">
-    基于 Harness + io + Cloud 构建的产品矩阵<br>
-    由单一员工主导操盘<br><br>
-    <span class="text-white/90">已产生数万美金的真实收入。</span>
-  </p>
-  <p class="mt-6 text-lg text-muted/60">钱不多，但证明这条路普通人能走通。</p>
-  <div class="notes">这套理论不是画饼。我们团队在背后还做了几个基于这套底座搭建的产品，今天不方便把具体马甲脱下来，但可以负责任地说：基于 Harness 框架，配合我们的计费和云服务，由单一员工主导操盘的这些产品，已经实打实跑通了整个商业闭环，赚到了大几万美金。钱不算多，但证明这条路普通人是可以走通的。</div>
-</div>
-
-<!-- Slide 12: 总结 -->
-<div class="slide" data-slide="12">
-  <h2 class="text-4xl font-medium tracking-tight leading-snug">提升认知，让 AI 去执行。<br><span class="text-muted">框架留空，填满即产品。</span></h2>
+  <h2 class="text-4xl font-medium tracking-tight leading-snug">100% 开源。<br><span class="text-muted">拿去用。</span></h2>
   <div class="mt-10 flex gap-12 items-center">
     <div class="w-32 h-32 bg-white rounded p-1 flex-shrink-0">
       <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://github.com/velobase/velobase-harness" alt="QR" class="w-full h-full">
     </div>
-    <div class="flex flex-col gap-3">
-      <div class="flex items-center gap-3">
-        <span class="text-muted w-16 text-sm">框架</span>
-        <span class="text-accent font-mono">github.com/velobase</span>
-      </div>
-      <div class="flex items-center gap-3">
-        <span class="text-muted w-16 text-sm">计费</span>
-        <span class="text-accent font-mono">velobase.io</span>
-      </div>
-      <div class="flex items-center gap-3">
-        <span class="text-muted w-16 text-sm">云端</span>
-        <span class="text-accent font-mono">velobase.cloud</span>
-      </div>
+    <div class="flex flex-col gap-4">
+      <div class="font-mono text-xl text-accent">github.com/velobase/velobase-harness</div>
+      <div class="text-muted text-base">Next.js 15 · tRPC · Prisma · BullMQ · Tailwind</div>
+      <div class="text-muted text-base">填环境变量启用，不改代码。</div>
     </div>
   </div>
   <p class="mt-10 text-base text-muted/40">Jerry · Velobase</p>
-  <div class="notes">总结一下。在 AI 时代，决定你产品能不能赚钱的，是你懂得多少商业常识，而不是写代码的速度。用 Harness 框架填补知识盲区，用 io 和 Cloud 省事。打开视野，去思考营销、增长和用户需求，把枯燥的执行交给 AI。我们是 Velobase，趟过了这些坑，把经验变成了产品。欢迎来 GitHub 看看，或者加我聊聊。谢谢大家。</div>
+  <div class="notes">Velobase Harness 完全开源。刚才讲的所有模块都在里面，代码和文档都有。你如果也在做 AI SaaS，可以直接克隆下来用，省掉这些踩坑的时间。谢谢大家。</div>
 </div>
 
 </div>
 
 <div class="fixed bottom-6 right-8 text-sm font-mono text-muted/40 z-50 select-none">
-  <span id="current">1</span> / <span id="total">12</span>
+  <span id="current">1</span> / <span id="total">9</span>
 </div>
 <div class="fixed bottom-6 left-8 text-xs text-white/20 z-50 select-none hidden md:block">
   ← → 翻页 · N 讲稿 · F 全屏
@@ -254,7 +215,7 @@ html, body { height: 100%; overflow: hidden; background: #0a0a1a; }
 <script>
 const slides = document.querySelectorAll('.slide');
 const total = slides.length;
-let current = parseInt(localStorage.getItem('opc-slide-v5') || '1');
+let current = parseInt(localStorage.getItem('opc-slide-v6') || '1');
 document.getElementById('total').textContent = total;
 
 function show(n) {
@@ -264,7 +225,7 @@ function show(n) {
   slides.forEach(s => s.classList.remove('active'));
   slides[current - 1].classList.add('active');
   document.getElementById('current').textContent = current;
-  localStorage.setItem('opc-slide-v5', current);
+  localStorage.setItem('opc-slide-v6', current);
 }
 show(current);
 
