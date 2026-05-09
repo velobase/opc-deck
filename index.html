@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>不要让人类限制了 AI — Jerry / Velobase</title>
+<title>不要让人类限制了 AI — Velobase</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
 <script>
@@ -42,8 +42,7 @@ html, body { height: 100%; overflow: hidden; background: #0a0a1a; }
   font-size: 14px; line-height: 1.7;
   color: rgba(255,255,255,0.25);
   border-top: 1px solid rgba(255,255,255,0.05);
-  max-height: 140px;
-  overflow-y: auto;
+  max-height: 140px; overflow-y: auto;
 }
 .notes::-webkit-scrollbar { width: 3px; }
 .notes::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
@@ -60,131 +59,105 @@ html, body { height: 100%; overflow: hidden; background: #0a0a1a; }
 <div id="click-left" class="absolute top-0 left-0 w-1/4 h-full z-40" style="cursor: w-resize;"></div>
 <div id="click-right" class="absolute top-0 right-0 w-3/4 h-full z-40" style="cursor: e-resize;"></div>
 
-<div class="relative w-screen h-screen z-10" id="presentation">
+<div class="relative w-screen h-screen z-10">
 
 <!-- Slide 1: 封面 -->
 <div class="slide active" data-slide="1">
-  <h1 class="text-5xl font-medium tracking-tight leading-tight">不要让人类限制了 AI</h1>
-  <p class="mt-6 text-xl text-muted">一人公司的商业化底座实践</p>
-  <div class="mt-16 flex items-center gap-4">
-    <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center text-accent font-bold">J</div>
+  <h1 class="text-5xl font-medium tracking-tight leading-tight">AI 时代的独立产品：<br>为什么代码自由了，财务还没自由？</h1>
+  <p class="mt-6 text-xl text-muted">Velobase 的踩坑与实践</p>
+  <p class="mt-12 text-base text-muted/50">Jerry · Velobase</p>
+  <div class="notes">大家好，我是 Jerry，Velobase 创始人。今天15分钟，跟大家聊聊天。过去一年大家都感受到了：AI 写代码越来越强。按理说开发门槛降这么低，独立开发者应该批量赚钱了。但现实是大部分人并没有。今天想分享一下我们团队是怎么看待这个问题，以及怎么去解决它的。</div>
+</div>
+
+<!-- Slide 2: 反直觉现象 -->
+<div class="slide" data-slide="2">
+  <h2 class="text-4xl font-medium tracking-tight leading-snug">不是 AI 写代码不行，<br><span class="text-muted">是不知道让 AI 写什么。</span></h2>
+  <div class="mt-8 max-w-2xl">
+    <p class="text-xl text-muted">过去：卡在「怎么实现」</p>
+    <p class="text-xl text-muted mt-2">现在：卡在「该实现什么」</p>
+    <p class="text-xl text-white/90 mt-4">从代码问题，变成了认知问题。</p>
+  </div>
+  <div class="notes">很多人抱怨产品不赚钱，原因往往归结为流量贵或者 AI 还不够聪明。但我们发现核心原因根本不是 AI 写代码不行，而是我们人类不知道该让 AI 去写什么。以前做产品卡在技术上，不知道"怎么写"；现在有了 AI，技术不是瓶颈了，我们却卡在了"该做哪些事才能让产品变成真正的商业软件"。这是认知问题。</div>
+</div>
+
+<!-- Slide 3: 功能 vs 生意 -->
+<div class="slide" data-slide="3">
+  <h2 class="text-4xl font-medium tracking-tight">从「玩具」到「商品」<br><span class="text-muted">中间差了什么？</span></h2>
+  <div class="mt-8 grid grid-cols-2 gap-8 max-w-2xl">
     <div>
-      <p class="text-base text-white/90">Jerry</p>
-      <p class="text-sm text-muted">Velobase</p>
+      <p class="text-sm text-muted/60 uppercase tracking-wider">开发者擅长的</p>
+      <p class="mt-2 text-lg text-muted">核心功能、UI 界面</p>
+    </div>
+    <div>
+      <p class="text-sm text-accent/80 uppercase tracking-wider">商业化必备的</p>
+      <p class="mt-2 text-lg text-white/80">计费、防滥用、A/B 测试<br>分销裂变、广告追踪……</p>
     </div>
   </div>
-  <div class="notes">大家好，我是 Jerry，一个人在做 Velobase。今天15分钟，跟大家聊聊一人公司在商业化这件事上，我踩了哪些坑，以及我是怎么爬出来的。</div>
+  <p class="mt-8 text-lg text-muted">AI 再强，也不能在你完全不知道的领域无中生有。</p>
+  <div class="notes">我们程序员最擅长做核心功能和好看的界面。但你真要把东西卖出去，你需要懂很多开发以外的东西。比如接支付、防滥用、做 A/B 测试、搞分销、做投放追踪。如果你脑子里压根没有"广告回传"这个概念，你怎么可能让 AI 帮你生成对应代码呢？AI 再强也不能在你完全不知道的领域无中生有。</div>
 </div>
 
-<!-- Slide 2: 行业观察 -->
-<div class="slide" data-slide="2">
-  <h2 class="text-4xl font-medium tracking-tight leading-snug">AI 写代码越来越强了，<br><span class="text-muted">但大部分一人公司，还是不赚钱。</span></h2>
-  <div class="mt-8 p-6 bg-card border border-white/5 rounded-lg max-w-2xl">
-    <p class="text-xl text-muted">最容易有的误诊：</p>
-    <h3 class="text-2xl font-medium mt-2">「是不是 AI 写的业务还不够复杂？」</h3>
-  </div>
-  <div class="notes">过去一年，我身边做独立开发的朋友越来越多。大家每天在群里惊叹 Cursor 多牛、Claude 多懂我。但一到月底看账单，没几个人真正赚到了钱。大家第一反应是——是不是我让 AI 写的东西还不够复杂？我看了很多项目，发现不是这么回事。</div>
-</div>
-
-<!-- Slide 3: 真正的瓶颈 -->
-<div class="slide" data-slide="3">
-  <h2 class="text-4xl font-medium tracking-tight">我们用 AI 做出了「功能」</h2>
-  <h2 class="text-4xl font-medium tracking-tight mt-2 text-muted">但没做成「生意」</h2>
-  <p class="mt-8 text-xl text-muted max-w-2xl leading-relaxed">
-    不是 AI 不行，是我们不知道该让 AI 做什么。<br><br>
-    <span class="text-white">人类是 AI 的主体。瓶颈在人的商业认知，不在 AI 的代码能力。</span>
-  </p>
-  <div class="notes">问题出在哪？很多纯技术背景的开发者，能让 AI 写出很炫的功能，但对完整的商业闭环是陌生的。你不知道一个能收钱的 SaaS 需要哪些基础设施，你就没法给 AI 下正确的指令。AI 是极其优秀的施工队，但你得先画出图纸来。</div>
-</div>
-
-<!-- Slide 4: 举例——广告回传 -->
+<!-- Slide 4: Harness 诞生 -->
 <div class="slide" data-slide="4">
-  <h2 class="text-3xl font-medium tracking-tight">举个例子：广告归因</h2>
-  <div class="mt-6 max-w-2xl">
-    <p class="text-xl text-muted leading-relaxed">大部分研发不知道什么是「广告回传」。</p>
-    <p class="mt-4 text-xl text-muted leading-relaxed">更不知道 <span class="font-mono text-accent/80">campaign_id</span>、<span class="font-mono text-accent/80">utm_source</span>、<span class="font-mono text-accent/80">fbclid</span> 这些社媒 trace 参数是干嘛的。</p>
-    <p class="mt-6 text-xl text-white/90">但研发不需要知道。</p>
-    <p class="mt-2 text-xl text-muted">只要框架提供了这个能力，你就可以通过和 AI 聊，来理解和填充它。</p>
-  </div>
-  <div class="notes">我举个特别具体的例子。做过投放的人都知道广告回传——你投了一笔广告费，用户点了广告来到你的网站，你得把转化数据传回给广告平台，它才能帮你优化。这里面有一堆参数：campaign_id、utm_source、fbclid……大部分纯研发从来没接触过这些。但问题是——你真的不需要一开始就搞懂它。你只需要框架里有这个模块、有这个位置。然后你跟 AI 聊："这个 campaign_id 是什么意思？我的场景该怎么回传？"AI 能教你。框架帮你把坑位留好了，AI 帮你填知识空白，你的认知就自然提升了。</div>
-</div>
-
-<!-- Slide 5: 框架=认知脚手架 -->
-<div class="slide" data-slide="5">
-  <h2 class="text-4xl font-medium tracking-tight leading-snug">框架留空，填满即产品</h2>
-  <p class="mt-6 text-xl text-muted max-w-2xl leading-relaxed">
-    研发不需要一开始就懂所有业务。<br>
-    框架把坑位留好了，AI 帮你填知识空白。<br><br>
-    <span class="text-white">填满这些空位，就是一个完整的商业产品。</span>
-  </p>
-  <div class="notes">这就是 Harness 的核心理念。它不是教你做生意的课程，也不是一个需要你完全理解才能用的复杂系统。它是一个脚手架——把一个商业化 SaaS 需要的所有能力，以模块的形式预留好位置。支付在这里、反滥用在这里、A/B 测试在这里、广告归因在这里。你不用一开始就搞懂所有东西，你只要知道这里有个坑位，然后跟 AI 聊着聊着就填上了。填满了，就是一个完整的商业产品。</div>
-</div>
-
-<!-- Slide 6: Harness 定位 -->
-<div class="slide" data-slide="6">
   <p class="text-base font-mono text-accent">开源 · velobase/velobase-harness</p>
-  <h2 class="text-4xl font-medium tracking-tight mt-4">商业化 SaaS 的完整底座</h2>
+  <h2 class="text-4xl font-medium tracking-tight mt-4">让「认知」和「经验」变得可学习</h2>
   <p class="mt-6 text-xl text-muted max-w-2xl leading-relaxed">
-    从真实盈利项目中抽离。<br>
-    一个人用这套框架，赚了几万美金。<br><br>
-    <span class="text-white">今天开源，让你站在一个更高的起点上。</span>
+    不只是代码模板，更是一份实战说明书。<br>
+    把商业化需要的坑位提前挖好。
   </p>
-  <div class="notes">这就是 Velobase Harness。我自己一个人做的 AI SaaS 产品，底下跑的就是这套框架，真金白银赚了几万美金。它不是玩具，是打过仗的东西。现在把它开源出来。你不用从零开始搭支付、搭反滥用、搭分销——这些我都踩过坑了，直接用就行。</div>
+  <div class="notes">为了解决认知盲区，我们做了第一款核心产品：Velobase Harness。完全开源的商业化 SaaS 框架。它跟市面上的框架不太一样。我们把团队做商业产品的经验全都沉淀在里面，它不仅是一套代码，更是一份实战说明书。我们把那些你必须要懂、但可能现在还没考虑到的商业化环节，提前在框架里留好了"坑位"。</div>
 </div>
 
-<!-- Slide 7: AI搞不定的 -->
-<div class="slide" data-slide="7">
-  <h2 class="text-3xl font-medium tracking-tight">AI 一句话搞不定的脏活，我们准备好了</h2>
+<!-- Slide 5: 广告归因举例 -->
+<div class="slide" data-slide="5">
+  <h2 class="text-3xl font-medium tracking-tight">举个例子：你完全不懂投放时</h2>
+  <div class="mt-6 max-w-2xl">
+    <p class="text-xl text-muted">研发不知道什么是「广告回传」。</p>
+    <p class="mt-3 text-xl text-muted">不知道 <span class="font-mono text-accent/80">campaign_id</span>、<span class="font-mono text-accent/80">utm_source</span>、<span class="font-mono text-accent/80">fbclid</span> 是干嘛的。</p>
+    <p class="mt-6 text-xl text-white/90 border-l-4 border-accent pl-4">没关系。框架里已经留好了追踪结构。<br>顺着框架跟 AI 聊着天，就能填上。</p>
+  </div>
+  <div class="notes">给大家举个很直观的例子。很多研发不懂广告投放，让你去接广告平台的转化回传，你可能连什么是 campaign_id 都不清楚。但没关系。在 Harness 框架里我们已经把追踪和转化的代码骨架预留好了，文档也会告诉你这是用来干嘛的。你不需要恶补几个月营销课，只要把这部分框架拿给 AI 看，顺着留的口子跟 AI 聊着天，AI 就能帮你把这些认知之外的代码填补完整。框架引导认知，AI 补齐执行。</div>
+</div>
+
+<!-- Slide 6: AI搞不定的 -->
+<div class="slide" data-slide="6">
+  <h2 class="text-3xl font-medium tracking-tight">AI 无法一句话搞定的事，我们准备好了</h2>
   <div class="mt-8 grid grid-cols-2 gap-6 max-w-3xl">
     <div class="p-5 rounded-lg bg-card border border-white/5">
-      <p class="text-accent text-sm font-medium">计费引擎</p>
-      <p class="mt-2 text-sm text-muted">积分+订阅+优惠码叠加<br>Stripe / Crypto / Telegram Stars</p>
+      <p class="text-accent text-sm font-medium">复杂计费</p>
+      <p class="mt-2 text-sm text-muted">积分+订阅+优惠码+多网关<br>算错账就是资产损失</p>
     </div>
     <div class="p-5 rounded-lg bg-card border border-white/5">
       <p class="text-accent text-sm font-medium">反滥用</p>
-      <p class="mt-2 text-sm text-muted">一次性邮箱、频率限制<br>风险评分、同 IP 多号</p>
+      <p class="mt-2 text-sm text-muted">一次性邮箱、频率限制<br>风险评分、精细化登录</p>
     </div>
     <div class="p-5 rounded-lg bg-card border border-white/5">
       <p class="text-accent text-sm font-medium">数据与增长</p>
       <p class="mt-2 text-sm text-muted">PostHog A/B 测试<br>广告归因回传</p>
     </div>
     <div class="p-5 rounded-lg bg-card border border-white/5">
-      <p class="text-accent text-sm font-medium">分销 + 精细化登录</p>
-      <p class="mt-2 text-sm text-muted">佣金追踪、防刷<br>Web/移动/Bot/Token 四端统一</p>
+      <p class="text-accent text-sm font-medium">分销系统</p>
+      <p class="mt-2 text-sm text-muted">佣金追踪、提现<br>防刷、裂变引擎</p>
     </div>
   </div>
-  <div class="notes">具体有什么？计费——不是接个 Stripe 就完了，是积分充值、赠送、优惠码、多网关这一整套组合。反滥用——一次性邮箱检测、风控评分，每个参数都是业务判断。PostHog A/B 测试——改了定价就跑实验。广告归因——刚才说的 campaign_id 那些，框架已经帮你把管道接好了。分销系统、精细化多端登录也都有。这些东西单独一个，AI 或许能写。但组合在一起形成一个完整的商业闭环——这需要来自真实项目的经验积累。</div>
+  <p class="mt-6 text-lg text-muted">对准确度要求极高的底层商业模块，别让 AI 重新造轮子。</p>
+  <div class="notes">当然除了认知引导，还有一些东西目前 AI 很难一次性写完美。比如复杂的按量计费——处理不善就是资产损失；比如精细的防滥用机制。对于这种 AI 容易出 bug、准确度要求又极高的底层模块，我们的态度是：别重新造轮子，我们帮你打磨好了。</div>
 </div>
 
-<!-- Slide 8: 代码展示 -->
+<!-- Slide 7: velobase.io -->
+<div class="slide" data-slide="7">
+  <p class="text-base font-mono text-accent">velobase.io</p>
+  <h2 class="text-4xl font-medium tracking-tight mt-4">计费即服务</h2>
+  <p class="mt-6 text-xl text-muted max-w-2xl leading-relaxed">
+    开箱即用的计费引擎。<br>
+    完美适配 Harness 框架。<br>
+    <span class="text-white/80">把「收钱」这件最容易出错的事交给我们。</span>
+  </p>
+  <div class="notes">除了开源的 Harness 框架，我们还提供了商业化服务 velobase.io。简单理解就是 Billing as a Service。你拿 Harness 搭好产品，需要收费的时候直接接入 velobase.io。最容易算错账、最容易出问题的计费模块我们独立出来了，就是为了让大家安心，把精力放在产品和推广上。</div>
+</div>
+
+<!-- Slide 8: Cloud -->
 <div class="slide" data-slide="8">
-  <h2 class="text-3xl font-medium tracking-tight">配置即启动</h2>
-  <div class="mt-8 p-6 rounded-lg bg-[#0d0d22] border border-white/5 font-mono text-sm leading-relaxed max-w-2xl shadow-xl">
-    <span class="text-muted/50"># 环境变量驱动，填了就开</span><br>
-    <span class="text-purple-300">STRIPE_SECRET_KEY</span>=<span class="text-green-400">sk_live_...</span><br>
-    <span class="text-purple-300">POSTHOG_KEY</span>=<span class="text-green-400">phc_...</span><br>
-    <span class="text-purple-300">NOWPAYMENTS_API_KEY</span>=<span class="text-green-400">...</span><br>
-    <span class="text-purple-300">META_PIXEL_ID</span>=<span class="text-green-400">...</span><br>
-    <br>
-    <span class="text-muted/50"># 一套代码，三个进程</span><br>
-    <span class="text-accent">pnpm dev</span>        <span class="text-muted/50"># Web</span><br>
-    <span class="text-accent">pnpm api:dev</span>    <span class="text-muted/50"># API</span><br>
-    <span class="text-accent">pnpm worker:dev</span> <span class="text-muted/50"># Worker</span>
-  </div>
-  <p class="mt-6 text-lg text-muted">填了 key 就开，不改代码。留空的模块，和 AI 聊完再填。</p>
-  <div class="notes">使用方式很简单。环境变量驱动——填了 Stripe key，支付就开了；填了 PostHog key，埋点就有了；填了 Meta Pixel ID，广告回传就通了。你不需要改代码。一开始你可以只填你理解的部分，不理解的留空。哪天你想搞明白了，跟 AI 聊一聊，然后回来把 key 填上就行。本质上就是：把一个 3-5 人团队的建制压缩到一个人 + AI 身上。</div>
-</div>
-
-<!-- Slide 9: 部署 -->
-<div class="slide" data-slide="9">
-  <p class="text-2xl text-muted">代码写好了。上线呢？</p>
-  <h2 class="text-4xl font-medium tracking-tight mt-6">K8s？Docker？Nginx？</h2>
-  <p class="mt-8 text-xl text-muted">一人公司的时间极其宝贵。<br>花在配环境上的每一天，都在远离用户。</p>
-  <div class="notes">研发效率上来了，但到了部署又是一个坑。很多开发者代码写完了，花两周去学 K8s、配 Nginx。一人公司的时间是最宝贵的资源，不应该花在这上面。</div>
-</div>
-
-<!-- Slide 10: Cloud -->
-<div class="slide" data-slide="10">
   <p class="text-base font-mono text-accent">velobase.cloud</p>
   <h2 class="text-4xl font-medium tracking-tight mt-4">Git Push → 上线</h2>
   <div class="mt-8 flex flex-wrap gap-3">
@@ -194,41 +167,85 @@ html, body { height: 100%; overflow: hidden; background: #0a0a1a; }
     <span class="px-4 py-2 text-sm rounded bg-accent/10 text-accent border border-accent/20">自动 SSL</span>
     <span class="px-4 py-2 text-sm rounded bg-accent/10 text-accent border border-accent/20">自定义域名</span>
   </div>
-  <p class="mt-6 text-lg text-white/90">原生理解 Harness 三进程结构，零配置。</p>
-  <p class="mt-2 text-lg text-muted">让机器管机器，人去想业务。</p>
-  <div class="notes">所以我们做了 velobase.cloud。它理解 Harness 的三进程架构，git push 上去就自动构建部署。PostgreSQL、Redis、对象存储、SSL 全包了。你不需要会运维，把精力留给获客和产品。</div>
+  <p class="mt-6 text-lg text-muted">为 Harness 优化的云部署。让「运维」不再成为绊脚石。</p>
+  <div class="notes">有了框架、有了计费，最后是上线。搞服务器配置、折腾数据库也是很消耗热情的事。所以我们做了 Velobase Cloud，跟我们的生态高度绑定。顺着 Harness 写完的产品，在我们 Cloud 上可以一键部署。到这里，从开发到收费再到上线的基建，全搭好了。</div>
 </div>
 
-<!-- Slide 11: 结尾 -->
+<!-- Slide 9: 组织架构 -->
+<div class="slide" data-slide="9">
+  <h2 class="text-4xl font-medium tracking-tight">一个「奇怪」的创业公司</h2>
+  <div class="mt-8 grid grid-cols-2 gap-8 max-w-2xl">
+    <div>
+      <p class="text-sm text-accent/80 uppercase tracking-wider">渠道运营</p>
+      <p class="mt-2 text-lg text-muted">品牌宣发、渠道积累</p>
+    </div>
+    <div>
+      <p class="text-sm text-accent/80 uppercase tracking-wider">产研</p>
+      <p class="mt-2 text-lg text-white/80">一人一产品。</p>
+    </div>
+  </div>
+  <p class="mt-8 text-xl text-muted">不是一个人的公司，但每个产品只有一个人。</p>
+  <div class="notes">刚才讲了这些工具，大家可能好奇：真的行得通吗？分享一下我们自己的组织架构。Velobase 是一个创业团队，不是单打独斗。但架构挺特别：公司分两拨人——渠道运营负责品牌和宣发，产研负责建产品。我们产研执行的是绝对的"一人一产品"制度。</div>
+</div>
+
+<!-- Slide 10: 一人一产品 -->
+<div class="slide" data-slide="10">
+  <h2 class="text-4xl font-medium tracking-tight">一个人 = 一整个商业闭环</h2>
+  <div class="mt-8 flex flex-wrap gap-2 max-w-3xl">
+    <span class="px-3 py-1.5 text-sm rounded bg-accent/10 text-accent border border-accent/20">写代码</span>
+    <span class="px-3 py-1.5 text-sm rounded bg-accent/10 text-accent border border-accent/20">社交媒体</span>
+    <span class="px-3 py-1.5 text-sm rounded bg-accent/10 text-accent border border-accent/20">渠道投放</span>
+    <span class="px-3 py-1.5 text-sm rounded bg-accent/10 text-accent border border-accent/20">Email 营销</span>
+    <span class="px-3 py-1.5 text-sm rounded bg-accent/10 text-accent border border-accent/20">私域群</span>
+    <span class="px-3 py-1.5 text-sm rounded bg-accent/10 text-accent border border-accent/20">数据分析</span>
+  </div>
+  <p class="mt-8 text-xl text-white/80">人提供认知覆盖面，AI 提供执行力。</p>
+  <p class="mt-2 text-xl text-muted">成为指挥官，不是打字员。</p>
+  <div class="notes">什么叫一人一产品？在我们这里不只是写代码。从调研、写代码到社交媒体运营、发 email、管理私域群、做广告投放、看数据分析——全是一个人搞定。听起来反人类对吧？但我们真实跑通了。核心就是：只要你的认知覆盖面足够广，只要你知道商业闭环包含哪些环节，你就不需要亲力亲为每一件事。AI 是你最好的执行团队。人的作用是决策和认知方向。</div>
+</div>
+
+<!-- Slide 11: 验证 -->
 <div class="slide" data-slide="11">
-  <h2 class="text-4xl font-medium tracking-tight leading-snug">
-    框架提供能力，AI 补齐认知，<br>
-    填满即产品。
-  </h2>
-  <div class="mt-12 flex gap-12 items-center">
+  <h2 class="text-4xl font-medium tracking-tight">用自己的狗粮，喂出真实结果</h2>
+  <p class="mt-6 text-xl text-muted max-w-2xl leading-relaxed">
+    基于 Harness + io + Cloud 构建的产品矩阵<br>
+    由单一员工主导操盘<br><br>
+    <span class="text-white/90">已产生数万美金的真实收入。</span>
+  </p>
+  <p class="mt-6 text-lg text-muted/60">钱不多，但证明这条路普通人能走通。</p>
+  <div class="notes">这套理论不是画饼。我们团队在背后还做了几个基于这套底座搭建的产品，今天不方便把具体马甲脱下来，但可以负责任地说：基于 Harness 框架，配合我们的计费和云服务，由单一员工主导操盘的这些产品，已经实打实跑通了整个商业闭环，赚到了大几万美金。钱不算多，但证明这条路普通人是可以走通的。</div>
+</div>
+
+<!-- Slide 12: 总结 -->
+<div class="slide" data-slide="12">
+  <h2 class="text-4xl font-medium tracking-tight leading-snug">提升认知，让 AI 去执行。<br><span class="text-muted">框架留空，填满即产品。</span></h2>
+  <div class="mt-10 flex gap-12 items-center">
     <div class="w-32 h-32 bg-white rounded p-1 flex-shrink-0">
       <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://github.com/velobase/velobase-harness" alt="QR" class="w-full h-full">
     </div>
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-3">
       <div class="flex items-center gap-3">
-        <span class="text-muted w-12 text-sm">开源</span>
-        <a href="https://github.com/velobase/velobase-harness" target="_blank" class="text-accent text-lg font-mono border-b border-accent/30 pb-0.5">github.com/velobase</a>
+        <span class="text-muted w-16 text-sm">框架</span>
+        <span class="text-accent font-mono">github.com/velobase</span>
       </div>
       <div class="flex items-center gap-3">
-        <span class="text-muted w-12 text-sm">云端</span>
-        <a href="https://velobase.cloud" target="_blank" class="text-accent text-lg font-mono border-b border-accent/30 pb-0.5">velobase.cloud</a>
+        <span class="text-muted w-16 text-sm">计费</span>
+        <span class="text-accent font-mono">velobase.io</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="text-muted w-16 text-sm">云端</span>
+        <span class="text-accent font-mono">velobase.cloud</span>
       </div>
     </div>
   </div>
-  <p class="mt-12 text-base text-muted/40 font-mono">Jerry · Velobase</p>
-  <div class="notes">总结一下。这个时代 AI 写代码已经不是瓶颈了。瓶颈是人的商业认知。但认知不需要你一开始就具备——框架帮你把坑位留好，你通过和 AI 聊，边用边学，把空填上。填满了就是一个完整的商业产品。这套东西帮我一个人赚了几万美金。现在开源了，希望对你有用。谢谢大家。</div>
+  <p class="mt-10 text-base text-muted/40">Jerry · Velobase</p>
+  <div class="notes">总结一下。在 AI 时代，决定你产品能不能赚钱的，是你懂得多少商业常识，而不是写代码的速度。用 Harness 框架填补知识盲区，用 io 和 Cloud 省事。打开视野，去思考营销、增长和用户需求，把枯燥的执行交给 AI。我们是 Velobase，趟过了这些坑，把经验变成了产品。欢迎来 GitHub 看看，或者加我聊聊。谢谢大家。</div>
 </div>
 
 </div>
 
-<!-- 控制栏 -->
 <div class="fixed bottom-6 right-8 text-sm font-mono text-muted/40 z-50 select-none">
-  <span id="current">1</span> / <span id="total">11</span>
+  <span id="current">1</span> / <span id="total">12</span>
 </div>
 <div class="fixed bottom-6 left-8 text-xs text-white/20 z-50 select-none hidden md:block">
   ← → 翻页 · N 讲稿 · F 全屏
@@ -237,8 +254,7 @@ html, body { height: 100%; overflow: hidden; background: #0a0a1a; }
 <script>
 const slides = document.querySelectorAll('.slide');
 const total = slides.length;
-let current = parseInt(localStorage.getItem('opc-slide-v4') || '1');
-
+let current = parseInt(localStorage.getItem('opc-slide-v5') || '1');
 document.getElementById('total').textContent = total;
 
 function show(n) {
@@ -248,9 +264,8 @@ function show(n) {
   slides.forEach(s => s.classList.remove('active'));
   slides[current - 1].classList.add('active');
   document.getElementById('current').textContent = current;
-  localStorage.setItem('opc-slide-v4', current);
+  localStorage.setItem('opc-slide-v5', current);
 }
-
 show(current);
 
 document.addEventListener('keydown', e => {
@@ -258,15 +273,8 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); show(current - 1); }
   if (e.key === 'Home') { e.preventDefault(); show(1); }
   if (e.key === 'End') { e.preventDefault(); show(total); }
-  if (e.key === 'f' || e.key === 'F') {
-    e.preventDefault();
-    if (!document.fullscreenElement) document.documentElement.requestFullscreen();
-    else document.exitFullscreen();
-  }
-  if (e.key === 'n' || e.key === 'N') {
-    e.preventDefault();
-    document.body.classList.toggle('notes-hidden');
-  }
+  if (e.key === 'f' || e.key === 'F') { e.preventDefault(); if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
+  if (e.key === 'n' || e.key === 'N') { e.preventDefault(); document.body.classList.toggle('notes-hidden'); }
 });
 
 document.getElementById('click-right').addEventListener('click', () => show(current + 1));
